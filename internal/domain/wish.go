@@ -1,17 +1,28 @@
 package domain
 
-import "github.com/gofrs/uuid/v5"
+import (
+	"github.com/gofrs/uuid/v5"
+)
 
 type Wish struct {
-	ID     string `json:"id"`
-	UserID string `json:"userId`
-	Name   string `json: "name"`
+	ID         string
+	UserID     string
+	WishlistID string
+	Name       string
+	//ReservedByUserID string
 }
 
-func NewWish(UserID string) *Wish {
-	id := uuid.Must(uuid.NewV4())
+func newWish(userID, wishlistID, name string) *Wish {
+	id := uuid.Must(uuid.NewV4()).String()
 	return &Wish{
-		ID:     id.String(),
-		UserID: UserID,
+		ID:         id,
+		UserID:     userID,
+		WishlistID: wishlistID,
+		Name:       name,
 	}
 }
+
+// type Reservation struct {
+// 	UserID string `json:"userId"`
+// 	WishID string `json:"wishId"`
+// }

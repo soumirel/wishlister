@@ -1,18 +1,32 @@
 package app
 
 import (
+	"log"
+	"os"
 	"wishlister/internal/controller"
 	"wishlister/internal/repository"
-	"wishlister/internal/service"
+	wishlist "wishlister/internal/service/wishlist"
 )
 
 func Run() {
-	dbPool := repository.InitDB()
-	userRepository := repository.NewUserRepository(dbPool)
-	wishRepository := repository.NewWishRepository(dbPool)
+	migrationsBytes, err := os.ReadFile("./db/init/init.sql")
+	if err != nil {
+		log.Fatal("open migrations file failed:", err.Error())
+	}
+	refreshScriptBytes, err := os.ReadFile("./db/refresh_test_data.sql")
+	if err != nil {
+		log.Fatal("open migrations file failed:", err.Error())
+	}
+	dbClient := repository.InitDbClient(string(migrationsBytes), string(refreshScriptBytes))
 
-	userService := service.NewUserService(userRepository)
-	wishService := service.NewWishService(wishRepository)
+	wishlistRepo := repository.NewWishlistRepository(dbClient)
+	wishRepo := repository.NewWishRepository(dbClient)
+	wishlistPermissionRepo := repository.NewWishlistPersmissionRepository(dbClient)
 
-	controller.StartHttpServer(userService, wishService)
+	wishlistService := wishlist.NewWishlistService(
+		wishlistRepo, wishRepo, wishlistPermissionRepo,
+		dbClient,
+	)
+
+	controller.StartHttpServer(wishlistService, wishlistService)
 }

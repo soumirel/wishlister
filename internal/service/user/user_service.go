@@ -1,4 +1,4 @@
-package service
+package user
 
 import (
 	"context"
@@ -16,7 +16,9 @@ type UserService struct {
 	userRepo userRepository
 }
 
-func NewUserService(userRepo userRepository) *UserService {
+func NewUserService(
+	userRepo userRepository,
+) *UserService {
 	return &UserService{
 		userRepo: userRepo,
 	}

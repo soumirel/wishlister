@@ -4,58 +4,50 @@ import (
 	"context"
 	"log"
 	"time"
-
-	"github.com/jackc/pgx/v5/pgxpool"
+	"wishlister/internal/pkg"
+	"wishlister/pkg/postgres"
 )
 
 const (
 	connString = "postgres://wishlister:wishlister@localhost:5432/wishlister?sslmode=disable"
 )
 
-func InitDB() *pgxpool.Pool {
+type db struct {
+	pkg.DbClient
+}
+
+func InitDbClient(migrationsScript string, refreshScript string) pkg.DbClient {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	pool, err := connect(ctx)
+	db, err := connect(ctx)
 	if err != nil {
 		log.Fatal("connection to db failed")
 	}
-	err = pool.Ping(ctx)
+	err = db.Ping(ctx)
 	if err != nil {
 		log.Fatal("db ping failed:", err.Error())
 	}
-	err = applyMigrations(ctx, pool)
+	err = db.execScript(ctx, migrationsScript)
 	if err != nil {
-		log.Fatal("db migrations failed:", err.Error())
+		log.Fatal("db migrations script failed:", err.Error())
 	}
-	return pool
+	err = db.execScript(ctx, refreshScript)
+	if err != nil {
+		log.Fatal("db refresh data script failed:", err.Error())
+	}
+	return db
 }
 
-func connect(ctx context.Context) (*pgxpool.Pool, error) {
-	pool, err := pgxpool.New(ctx, connString)
+func connect(ctx context.Context) (*db, error) {
+	dbClient, err := postgres.NewPostgresClient(ctx, connString)
 	if err != nil {
 		return nil, err
 	}
-	return pool, nil
+	return &db{dbClient}, nil
 }
 
-func applyMigrations(ctx context.Context, db *pgxpool.Pool) error {
-	query := `
-	CREATE TABLE IF NOT EXISTS users(
-		id text NOT NULL,
-		name text NOT NULL,
-		CONSTRAINT users_pk PRIMARY KEY(id)
-	);
-
-	CREATE TABLE IF NOT EXISTS wishes(
-		id text NOT NULL,
-		user_id text NOT NULL,
-		name text NOT NULL,
-		CONSTRAINT wishes_pk PRIMARY KEY(id),
-		CONSTRAINT user_id_fk FOREIGN KEY(user_id) REFERENCES users(id),
-		CONSTRAINT user_id_wish_id_uq UNIQUE (user_id, id)
-	)
-	`
-	_, err := db.Exec(ctx, query)
+func (d *db) execScript(ctx context.Context, migrationsScript string) error {
+	_, err := d.Exec(ctx, migrationsScript)
 	if err != nil {
 		return err
 	}
