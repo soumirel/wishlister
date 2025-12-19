@@ -3,9 +3,6 @@ package dto
 type GetWishlistsRequest struct {
 }
 
-type GetWishlistsResponse struct {
-}
-
 type GetWishlistRequest struct {
 }
 
@@ -27,12 +24,4 @@ type GrantWishlistPermissionRequest struct {
 
 type RevokeWishlistPermissionRequest struct {
 	UserID string `json:"user_id" binding:"required"`
-}
-
-type CreateWishRequest struct {
-	WishName string `json:"name" binding:"required"`
-}
-
-type UpdateWishRequest struct {
-	WishName string `json:"name" binding:"required"`
 }

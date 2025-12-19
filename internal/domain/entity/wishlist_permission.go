@@ -1,6 +1,8 @@
-package domain
+package entity
 
-import "errors"
+import (
+	"errors"
+)
 
 type WishlistAction string
 
@@ -56,9 +58,9 @@ func (p *WishlistPermission) Can(action WishlistAction) bool {
 	return ok
 }
 
-type WishlistsPersmmissions []*WishlistPermission
+type WishlistsPermissions []*WishlistPermission
 
-func (p WishlistsPersmmissions) GetWishlitsIdsForAction(action WishlistAction) []string {
+func (p WishlistsPermissions) GetWishlitsIdsForAction(action WishlistAction) []string {
 	wishlitsIds := make([]string, 0)
 	for _, permission := range p {
 		if permission.Can(action) {

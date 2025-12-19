@@ -5,7 +5,12 @@ import (
 	"os"
 	"wishlister/internal/controller"
 	"wishlister/internal/repository"
-	wishlist "wishlister/internal/service/wishlist"
+	"wishlister/internal/uof"
+	useruc "wishlister/internal/usecase/user"
+
+	wishuc "wishlister/internal/usecase/wish"
+	wishlistuc "wishlister/internal/usecase/wishlist"
+	wishlistpermuc "wishlister/internal/usecase/wishlist_permission"
 )
 
 func Run() {
@@ -17,16 +22,14 @@ func Run() {
 	if err != nil {
 		log.Fatal("open migrations file failed:", err.Error())
 	}
-	dbClient := repository.InitDbClient(string(migrationsBytes), string(refreshScriptBytes))
+	postgresClient := repository.InitPostgresClient(string(migrationsBytes), string(refreshScriptBytes))
 
-	wishlistRepo := repository.NewWishlistRepository(dbClient)
-	wishRepo := repository.NewWishRepository(dbClient)
-	wishlistPermissionRepo := repository.NewWishlistPersmissionRepository(dbClient)
+	uofFactory := uof.NewUnitOfWorkFactory(postgresClient)
 
-	wishlistService := wishlist.NewWishlistService(
-		wishlistRepo, wishRepo, wishlistPermissionRepo,
-		dbClient,
-	)
+	userUc := useruc.NewUserUsecase(uofFactory)
+	wishlistUc := wishlistuc.NewWishlistUsecase(uofFactory)
+	wishUc := wishuc.NewWishUsecase(uofFactory)
+	wishlistPermissionUc := wishlistpermuc.NewWishlistPermissionUsecase(uofFactory)
 
-	controller.StartHttpServer(wishlistService, wishlistService)
+	controller.StartHttpServer(userUc, wishlistUc, wishUc, wishlistPermissionUc)
 }

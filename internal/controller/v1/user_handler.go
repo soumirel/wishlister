@@ -1,83 +1,87 @@
 package controller
 
-// import (
-// 	"net/http"
-// 	"wishlister/internal/domain"
-// 	"wishlister/internal/service"
+import (
+	"net/http"
+	"wishlister/internal/controller/v1/dto"
+	useruc "wishlister/internal/usecase/user"
 
-// 	"github.com/gin-gonic/gin"
-// )
+	"github.com/gin-gonic/gin"
+)
 
-// type userHandler struct {
-// 	userService *service.UserService
-// }
+const (
+	userIdPathParam = "userID"
+)
 
-// func NewUserHandler(gr *gin.RouterGroup,
-// 	userService *service.UserService) *userHandler {
-// 	h := &userHandler{
-// 		userService: userService,
-// 	}
-// 	gr.GET("/", h.getList)
-// 	gr.GET("/:id", h.getByID)
-// 	gr.POST("/", h.create)
-// 	gr.DELETE("/:id", h.delete)
-// 	return h
-// }
+type userHandler struct {
+	userUc *useruc.UserUsecase
+}
 
-// func (h *userHandler) getList(c *gin.Context) {
-// 	ctx := c.Request.Context()
-// 	usersList, err := h.userService.GetList(ctx)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, usersList)
-// }
+func NewUserHandler(gr *gin.RouterGroup,
+	userUc *useruc.UserUsecase) *userHandler {
+	h := &userHandler{
+		userUc: userUc,
+	}
+	gr.GET("/", h.getUsers)
+	gr.POST("/", h.createUser)
 
-// func (h *userHandler) getByID(c *gin.Context) {
-// 	ctx := c.Request.Context()
-// 	id := c.Param("id")
-// 	user, err := h.userService.GetByID(ctx, id)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, user)
-// }
+	const userPathPart = "/:" + userIdPathParam
+	userIdGr := gr.Group(userPathPart)
+	userIdGr.GET("", h.getUser)
+	userIdGr.DELETE("", h.deleteUser)
 
-// func (h *userHandler) create(c *gin.Context) {
-// 	ctx := c.Request.Context()
-// 	var req domain.User
-// 	err := c.BindJSON(&req)
-// 	if err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		return
-// 	}
-// 	user, err := h.userService.Create(ctx, req)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		return
-// 	}
-// 	c.JSON(http.StatusCreated, user)
-// }
+	return h
+}
 
-// func (h *userHandler) delete(c *gin.Context) {
-// 	ctx := c.Request.Context()
-// 	id := c.Param("id")
-// 	err := h.userService.Delete(ctx, id)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, gin.H{})
-// }
+func (h *userHandler) getUsers(c *gin.Context) {
+	ctx := c.Request.Context()
+	usersList, err := h.userUc.GetUsers(ctx, useruc.GetUsersCommand{})
+	if err != nil {
+		c.Error(err)
+		return
+	}
+	c.JSON(http.StatusOK, usersList)
+}
+
+func (h *userHandler) getUser(c *gin.Context) {
+	ctx := c.Request.Context()
+	id := c.Param("id")
+	user, err := h.userUc.GetUser(ctx, useruc.GetUserCommand{
+		UserID: id,
+	})
+	if err != nil {
+		c.Error(err)
+		return
+	}
+	c.JSON(http.StatusOK, user)
+}
+
+func (h *userHandler) createUser(c *gin.Context) {
+	ctx := c.Request.Context()
+	var req dto.CreateUserRequest
+	err := c.BindJSON(&req)
+	if err != nil {
+		c.Error(err)
+		return
+	}
+	user, err := h.userUc.CreateUser(ctx, useruc.CreateUserCommand{
+		Name: req.Name,
+	})
+	if err != nil {
+		c.Error(err)
+		return
+	}
+	c.JSON(http.StatusCreated, user)
+}
+
+func (h *userHandler) deleteUser(c *gin.Context) {
+	ctx := c.Request.Context()
+	id := c.Param("id")
+	err := h.userUc.DeleteUser(ctx, useruc.DeleteUserCommand{
+		UserID: id,
+	})
+	if err != nil {
+		c.Error(err)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{})
+}

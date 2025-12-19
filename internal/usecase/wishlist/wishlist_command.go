@@ -25,19 +25,6 @@ type DeleteWishlistCommand struct {
 	WishlistID      string
 }
 
-type GrantWishlistPermissionCommand struct {
-	RequestorUserID  string
-	WishlistID       string
-	RequestingUserID string
-	PersmissionLevel string
-}
-
-type RevokeWishlistPermissionCommand struct {
-	RequestorUserID  string
-	WishlistID       string
-	RequestingUserID string
-}
-
 type GetWishCommand struct {
 	RequestorUserID string
 	WishlistID      string

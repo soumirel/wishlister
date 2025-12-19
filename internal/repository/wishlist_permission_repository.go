@@ -3,31 +3,31 @@ package repository
 import (
 	"context"
 	"errors"
-	"wishlister/internal/domain"
-	"wishlister/internal/pkg"
+	"wishlister/internal/domain/entity"
+	"wishlister/internal/domain/repository"
 
 	"github.com/georgysavva/scany/v2/pgxscan"
 	"github.com/jackc/pgx/v5"
 )
 
 type wishlistPermissionRepo struct {
-	db pkg.DbExecutor
+	q Querier
 }
 
-func NewWishlistPersmissionRepository(db pkg.DbExecutor) *wishlistPermissionRepo {
+func newWishlistPersmissionRepository(q Querier) repository.WishlistPermissionRepository {
 	return &wishlistPermissionRepo{
-		db: db,
+		q: q,
 	}
 }
 
-func (r *wishlistPermissionRepo) GetPermissionToWishlist(ctx context.Context, userID, wishlistID string) (*domain.WishlistPermission, error) {
+func (r *wishlistPermissionRepo) GetPermissionToWishlist(ctx context.Context, userID, wishlistID string) (*entity.WishlistPermission, error) {
 	query := `
 			SELECT id, user_id, wishlist_id, permission_level
 			FROM wishlists_permissions
 			WHERE user_id = $1
 				AND wishlist_id = $2`
-	var permission domain.WishlistPermission
-	err := r.db.QueryRow(ctx, query, userID, wishlistID).Scan(
+	var permission entity.WishlistPermission
+	err := r.q.QueryRow(ctx, query, userID, wishlistID).Scan(
 		&permission.ID, &permission.UserID, &permission.WishlistID, &permission.Level,
 	)
 	if err != nil {
@@ -39,13 +39,13 @@ func (r *wishlistPermissionRepo) GetPermissionToWishlist(ctx context.Context, us
 	return &permission, nil
 }
 
-func (r *wishlistPermissionRepo) GetUserPermissionsToWishlists(ctx context.Context, userID string) (domain.WishlistsPersmmissions, error) {
+func (r *wishlistPermissionRepo) GetPermissionsToWishlists(ctx context.Context, userID string) (entity.WishlistsPermissions, error) {
 	query := `
 			SELECT id, user_id, wishlist_id, permission_level
 			FROM wishlists_permissions
 			WHERE user_id = $1`
-	var permissions []*domain.WishlistPermission
-	rows, err := r.db.Query(ctx, query, userID)
+	var permissions []*entity.WishlistPermission
+	rows, err := r.q.Query(ctx, query, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -56,14 +56,14 @@ func (r *wishlistPermissionRepo) GetUserPermissionsToWishlists(ctx context.Conte
 	return permissions, nil
 }
 
-func (r *wishlistPermissionRepo) SaveWishlistPermission(ctx context.Context, permission *domain.WishlistPermission) error {
+func (r *wishlistPermissionRepo) SaveWishlistPermission(ctx context.Context, permission *entity.WishlistPermission) error {
 	query := `
 			INSERT INTO wishlists_permissions(user_id, wishlist_id, permission_level)
 			VALUES ($1, $2, $3)
 			ON CONFLICT (user_id, wishlist_id)
 			DO UPDATE
 				SET permission_level = excluded.permission_level`
-	_, err := r.db.Exec(ctx, query, permission.UserID, permission.WishlistID, permission.Level)
+	_, err := r.q.Exec(ctx, query, permission.UserID, permission.WishlistID, permission.Level)
 	if err != nil {
 		return err
 	}
@@ -75,7 +75,7 @@ func (r *wishlistPermissionRepo) DeleteWishlistPermission(ctx context.Context, u
 			DELETE FROM wishlists_permissions
 			WHERE user_id = $1
 				AND wishlist_id = $2`
-	_, err := r.db.Exec(ctx, query, userID, wishlistID)
+	_, err := r.q.Exec(ctx, query, userID, wishlistID)
 	if err != nil {
 		return nil
 	}

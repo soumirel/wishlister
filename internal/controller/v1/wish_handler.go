@@ -1,46 +1,32 @@
 package controller
 
 import (
-	"context"
 	"net/http"
 	"wishlister/internal/auth"
 	"wishlister/internal/controller/v1/dto"
-	"wishlister/internal/domain"
-	service "wishlister/internal/service/wishlist"
+	wishuc "wishlister/internal/usecase/wish"
 
 	"github.com/gin-gonic/gin"
 )
 
 const (
-	wishIdParam = "wishID"
+	wishIdPathParam = "wishID"
 )
 
-type WishService interface {
-	GetWish(context.Context, service.GetWishCommand) (domain.Wish, error)
-	CreateWish(context.Context, service.CreateWishCommand) (domain.Wish, error)
-	UpdateWish(context.Context, service.UpdateWishCommand) (domain.Wish, error)
-	DeleteWish(context.Context, service.DeleteWishCommand) error
-}
-
-// type WishesReservationService interface {
-// 	ReserveWish(context.Context, domain.Reservation) error
-// 	CancelWishReservation(context.Context, domain.Reservation) error
-// }
-
 type wishHandler struct {
-	wishesService WishService
+	wishUc *wishuc.WishUsecase
 }
 
-func NewWishesHandler(wishlistGr *gin.RouterGroup,
-	wishesService WishService,
+func NewWishHandler(wishlistGr *gin.RouterGroup,
+	wishesService *wishuc.WishUsecase,
 ) *wishHandler {
 	h := &wishHandler{
-		wishesService: wishesService,
+		wishUc: wishesService,
 	}
 
 	wishlistGr.POST("/", h.createWish)
 
-	const wishPathPart = "/:" + wishIdParam
+	const wishPathPart = "/:" + wishIdPathParam
 	wishGr := wishlistGr.Group(wishPathPart)
 
 	wishGr.GET("", h.getWish)
@@ -53,12 +39,12 @@ func NewWishesHandler(wishlistGr *gin.RouterGroup,
 func (h *wishHandler) getWish(c *gin.Context) {
 	ctx := c.Request.Context()
 	au := auth.FromCtxOrEmpty(ctx)
-	cmd := service.GetWishCommand{
+	cmd := wishuc.GetWishCommand{
 		RequestorUserID: au.UserID,
-		WishlistID:      c.Param(wishlistIdParam),
-		WishID:          c.Param(wishIdParam),
+		WishlistID:      c.Param(wishlistIdPathParam),
+		WishID:          c.Param(wishIdPathParam),
 	}
-	wish, err := h.wishesService.GetWish(ctx, cmd)
+	wish, err := h.wishUc.GetWish(ctx, cmd)
 	if err != nil {
 		c.Error(err)
 		return
@@ -75,12 +61,12 @@ func (h *wishHandler) createWish(c *gin.Context) {
 		return
 	}
 	au := auth.FromCtxOrEmpty(ctx)
-	cmd := service.CreateWishCommand{
+	cmd := wishuc.CreateWishCommand{
 		RequestorUserID: au.UserID,
-		WishlistID:      c.Param(wishlistIdParam),
+		WishlistID:      c.Param(wishlistIdPathParam),
 		WishName:        req.WishName,
 	}
-	wishlist, err := h.wishesService.CreateWish(ctx, cmd)
+	wishlist, err := h.wishUc.CreateWish(ctx, cmd)
 	if err != nil {
 		c.Error(err)
 		return
@@ -97,13 +83,13 @@ func (h *wishHandler) updateWish(c *gin.Context) {
 		return
 	}
 	au := auth.FromCtxOrEmpty(ctx)
-	cmd := service.UpdateWishCommand{
+	cmd := wishuc.UpdateWishCommand{
 		RequestorUserID: au.UserID,
-		WishlistID:      c.Param(wishlistIdParam),
-		WishID:          c.Param(wishIdParam),
+		WishlistID:      c.Param(wishlistIdPathParam),
+		WishID:          c.Param(wishIdPathParam),
 		WishName:        req.WishName,
 	}
-	wishlist, err := h.wishesService.UpdateWish(ctx, cmd)
+	wishlist, err := h.wishUc.UpdateWish(ctx, cmd)
 	if err != nil {
 		c.Error(err)
 		return
@@ -114,37 +100,15 @@ func (h *wishHandler) updateWish(c *gin.Context) {
 func (h *wishHandler) deleteWish(c *gin.Context) {
 	ctx := c.Request.Context()
 	au := auth.FromCtxOrEmpty(ctx)
-	cmd := service.DeleteWishCommand{
+	cmd := wishuc.DeleteWishCommand{
 		RequestorUserID: au.UserID,
-		WishlistID:      c.Param(wishlistIdParam),
-		WishID:          c.Param(wishIdParam),
+		WishlistID:      c.Param(wishlistIdPathParam),
+		WishID:          c.Param(wishIdPathParam),
 	}
-	err := h.wishesService.DeleteWish(ctx, cmd)
+	err := h.wishUc.DeleteWish(ctx, cmd)
 	if err != nil {
 		c.Error(err)
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{})
 }
-
-// func (h *wishesHandler) reserve(c *gin.Context) {
-// 	ctx := c.Request.Context()
-// 	reservation := domain.Reservation{
-// 		WishID: c.Param("id"),
-// 	}
-// 	err := c.BindJSON(&reservation)
-// 	if err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		return
-// 	}
-// 	err = h.wishesService.Reserve(ctx, reservation)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, reservation)
-// }

@@ -1,7 +1,13 @@
-package domain
+package entity
 
 import (
+	"errors"
+
 	"github.com/gofrs/uuid/v5"
+)
+
+var (
+	ErrUserDoesNotExist = errors.New("user does not exist")
 )
 
 type User struct {

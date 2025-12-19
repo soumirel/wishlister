@@ -3,63 +3,61 @@ package repository
 import (
 	"context"
 	"errors"
-	"wishlister/internal/domain"
-	"wishlister/internal/pkg"
+	"wishlister/internal/domain/entity"
+	"wishlister/internal/domain/repository"
 
 	"github.com/jackc/pgx/v5"
 )
 
 type wishRepository struct {
-	db pkg.DbExecutor
+	q Querier
 }
 
-func NewWishRepository(db pkg.DbExecutor) *wishRepository {
+func newWishRepository(q Querier) repository.WishRepository {
 	return &wishRepository{
-		db: db,
+		q: q,
 	}
 }
 
-func (r *wishRepository) GetWish(ctx context.Context, userID, wishlistID, wishID string) (*domain.Wish, error) {
+func (r *wishRepository) GetWish(ctx context.Context, wishlistID, wishID string) (*entity.Wish, error) {
 	query := `
 			SELECT 
-				id, user_id, wishlist_id, name
+				id, wishlist_id, name
 			FROM wishes
-			WHERE user_id = $1
-				AND wishlist_id = $2
-				AND id = $3`
-	var wish domain.Wish
-	err := r.db.QueryRow(ctx, query, userID, wishlistID, wishID).Scan(
-		&wish.ID, &wish.UserID, &wish.WishlistID, &wish.Name,
+			WHERE wishlist_id = $1
+				AND id = $2`
+	var wish entity.Wish
+	err := r.q.QueryRow(ctx, query, wishlistID, wishID).Scan(
+		&wish.ID, &wish.WishlistID, &wish.Name,
 	)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, domain.ErrWishDoesNotExist
+			return nil, entity.ErrWishDoesNotExist
 		}
 		return nil, err
 	}
 	return &wish, nil
 }
 
-func (r *wishRepository) UpdateWish(ctx context.Context, wish *domain.Wish) error {
+func (r *wishRepository) UpdateWish(ctx context.Context, wish *entity.Wish) error {
 	query := `
 			UPDATE wishes 
-			SET name = $4
-			WHERE user_id = $1
-				AND wishlist_id = $2
-				AND id = $3`
-	_, err := r.db.Exec(ctx, query, wish.UserID, wish.WishlistID, wish.ID, wish.Name)
+			SET name = $3
+			WHERE wishlist_id = $1
+				AND id = $2`
+	_, err := r.q.Exec(ctx, query, wish.WishlistID, wish.ID, wish.Name)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *wishRepository) CreateWish(ctx context.Context, wish *domain.Wish) error {
+func (r *wishRepository) CreateWish(ctx context.Context, wish *entity.Wish) error {
 	query := `
-			INSERT INTO wishes(id, user_id, wishlist_id, name)
-			VALUES ($1, $2, $3, $4)`
-	_, err := r.db.Exec(ctx, query,
-		wish.ID, wish.UserID, wish.WishlistID, wish.Name,
+			INSERT INTO wishes(id, wishlist_id, name)
+			VALUES ($1, $2, $3)`
+	_, err := r.q.Exec(ctx, query,
+		wish.ID, wish.WishlistID, wish.Name,
 	)
 	if err != nil {
 		return err
@@ -67,13 +65,12 @@ func (r *wishRepository) CreateWish(ctx context.Context, wish *domain.Wish) erro
 	return nil
 }
 
-func (r *wishRepository) DeleteWish(ctx context.Context, userID, wishlistID, wishID string) error {
+func (r *wishRepository) DeleteWish(ctx context.Context, wishlistID, wishID string) error {
 	query := `
 			DELETE FROM wishes
-			WHERE user_id = $1
-				AND wishlist_id = $2
-				AND id = $3`
-	_, err := r.db.Exec(ctx, query, userID, wishlistID, wishID)
+			WHERE wishlist_id = $1
+				AND id = $2`
+	_, err := r.q.Exec(ctx, query, wishlistID, wishID)
 	if err != nil {
 		return err
 	}

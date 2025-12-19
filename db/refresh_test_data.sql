@@ -1,3 +1,4 @@
+DELETE FROM wishlists_permissions;
 DELETE FROM wishes;
 DELETE FROM wishlists;
 DELETE FROM users;
@@ -21,11 +22,10 @@ VALUES
 ('bob', 'bob_wishlist_1', 'owner'),
 ('bob', 'bob_wishlist_2', 'owner');
 
-
-INSERT INTO wishes (id, wishlist_id, user_id, name)
+INSERT INTO wishes (id, wishlist_id, name)
 VALUES
-('alice_wish_1', 'alice_wishlist_1', 'alice', 'Alice Wish 1'),
-('alice_wish_2', 'alice_wishlist_1', 'alice', 'Alice Wish 2'),
-('bob_wish_1', 'bob_wishlist_1', 'bob', 'Bob Wish 1');
+('alice_wish_1', 'alice_wishlist_1', 'Alice Wish 1'),
+('alice_wish_2', 'alice_wishlist_1', 'Alice Wish 2'),
+('bob_wish_1', 'bob_wishlist_1', 'Bob Wish 1');
 
 
