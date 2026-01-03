@@ -9,7 +9,7 @@ type WishlistAction string
 const (
 	ReadWishlistAction        WishlistAction = "read"
 	ModifyWishlistAction      WishlistAction = "modify"
-	ReserveWishWishlistAction                = "reserve"
+	ReserveWishWishlistAction WishlistAction = "reserve"
 )
 
 type WishlistPermissionLevel string

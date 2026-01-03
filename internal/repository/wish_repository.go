@@ -7,6 +7,7 @@ import (
 	"wishlister/internal/domain/repository"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type wishRepository struct {
@@ -22,19 +23,37 @@ func newWishRepository(q Querier) repository.WishRepository {
 func (r *wishRepository) GetWish(ctx context.Context, wishlistID, wishID string) (*entity.Wish, error) {
 	query := `
 			SELECT 
-				id, wishlist_id, name
-			FROM wishes
-			WHERE wishlist_id = $1
-				AND id = $2`
-	var wish entity.Wish
+				w.id, w.wishlist_id, w.name,
+				r.id, r.reserved_by_user_id, r.reserved_at
+			FROM wishes w
+			LEFT JOIN wish_reservations r
+				ON r.wish_id = w.id
+			WHERE w.wishlist_id = $1
+				AND w.id = $2`
+	var (
+		wish        entity.Wish
+		reservation struct {
+			ID               pgtype.Text
+			ReservedByUserID pgtype.Text
+			ReservedAt       pgtype.Timestamptz
+		}
+	)
 	err := r.q.QueryRow(ctx, query, wishlistID, wishID).Scan(
 		&wish.ID, &wish.WishlistID, &wish.Name,
+		&reservation.ID, &reservation.ReservedByUserID, &reservation.ReservedAt,
 	)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, entity.ErrWishDoesNotExist
 		}
 		return nil, err
+	}
+	if reservation.ID.Valid {
+		wish.Reservation = &entity.WishReservation{
+			ID:               reservation.ID.String,
+			ReservedByUserID: reservation.ReservedByUserID.String,
+			ReservedAt:       reservation.ReservedAt.Time,
+		}
 	}
 	return &wish, nil
 }
@@ -49,15 +68,60 @@ func (r *wishRepository) UpdateWish(ctx context.Context, wish *entity.Wish) erro
 	if err != nil {
 		return err
 	}
+
+	var (
+		reservationQuery string
+		reservationArgs  []any
+	)
+	if wish.Reservation == nil {
+		reservationQuery = `
+			DELETE FROM wish_reservations
+			WHERE wish_id = $1`
+		reservationArgs = []any{wish.ID}
+	} else {
+		reservation := wish.Reservation
+		reservationQuery = `
+			INSERT INTO wish_reservations (
+				id, wish_id, reserved_by_user_id, reserved_at
+			) VALUES ($1, $2, $3, $4)
+				ON CONFLICT (id) 
+				DO NOTHING`
+		reservationArgs = []any{
+			reservation.ID,
+			wish.ID,
+			reservation.ReservedByUserID,
+			reservation.ReservedAt,
+		}
+	}
+
+	_, err = r.q.Exec(ctx, reservationQuery, reservationArgs...)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func (r *wishRepository) CreateWish(ctx context.Context, wish *entity.Wish) error {
-	query := `
+	insertWishQuery := `
 			INSERT INTO wishes(id, wishlist_id, name)
 			VALUES ($1, $2, $3)`
-	_, err := r.q.Exec(ctx, query,
+	_, err := r.q.Exec(ctx, insertWishQuery,
 		wish.ID, wish.WishlistID, wish.Name,
+	)
+	if err != nil {
+		return err
+	}
+
+	if wish.Reservation == nil {
+		return nil
+	}
+	reservation := wish.Reservation
+	insertReservationQuery := `
+			INSERT INTO wish_reservations(
+				id, wish_id, reserved_by_user_id, reserved_at
+			) VALUES($1, $2, $3, $4)`
+	_, err = r.q.Exec(ctx, insertReservationQuery,
+		reservation.ID, wish.ID, reservation.ReservedByUserID, reservation.ReservedAt,
 	)
 	if err != nil {
 		return err

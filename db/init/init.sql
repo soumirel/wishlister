@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS wishes(
 );
 
 -- ACL
-CREATE TABLE IF NOT EXISTS wishlists_permissions(
+CREATE TABLE IF NOT EXISTS wishlist_permissions(
     id bigserial NOT NULL,
     user_id text NOT NULL,
     wishlist_id text NOT NULL,
@@ -45,3 +45,15 @@ CREATE TABLE IF NOT EXISTS wishlists_permissions(
     FOREIGN KEY(wishlist_id) REFERENCES wishlists(id) ON DELETE CASCADE,
     UNIQUE (user_id, wishlist_id)
 );
+
+CREATE TABLE IF NOT EXISTS wish_reservations(
+    id text NOT NULL,
+    wish_id text NOT NULL,
+    reserved_by_user_id text NOT NULL,
+    reserved_at timestamptz NOT NULL DEFAULT now(),
+
+    PRIMARY KEY(id),
+    FOREIGN KEY(wish_id) REFERENCES wishes(id) ON DELETE CASCADE,
+    FOREIGN KEY(reserved_by_user_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE(wish_id)
+)

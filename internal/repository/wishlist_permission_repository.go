@@ -23,7 +23,7 @@ func newWishlistPersmissionRepository(q Querier) repository.WishlistPermissionRe
 func (r *wishlistPermissionRepo) GetPermissionToWishlist(ctx context.Context, userID, wishlistID string) (*entity.WishlistPermission, error) {
 	query := `
 			SELECT id, user_id, wishlist_id, permission_level
-			FROM wishlists_permissions
+			FROM wishlist_permissions
 			WHERE user_id = $1
 				AND wishlist_id = $2`
 	var permission entity.WishlistPermission
@@ -42,7 +42,7 @@ func (r *wishlistPermissionRepo) GetPermissionToWishlist(ctx context.Context, us
 func (r *wishlistPermissionRepo) GetPermissionsToWishlists(ctx context.Context, userID string) (entity.WishlistsPermissions, error) {
 	query := `
 			SELECT id, user_id, wishlist_id, permission_level
-			FROM wishlists_permissions
+			FROM wishlist_permissions
 			WHERE user_id = $1`
 	var permissions []*entity.WishlistPermission
 	rows, err := r.q.Query(ctx, query, userID)
@@ -58,7 +58,7 @@ func (r *wishlistPermissionRepo) GetPermissionsToWishlists(ctx context.Context, 
 
 func (r *wishlistPermissionRepo) SaveWishlistPermission(ctx context.Context, permission *entity.WishlistPermission) error {
 	query := `
-			INSERT INTO wishlists_permissions(user_id, wishlist_id, permission_level)
+			INSERT INTO wishlist_permissions(user_id, wishlist_id, permission_level)
 			VALUES ($1, $2, $3)
 			ON CONFLICT (user_id, wishlist_id)
 			DO UPDATE
@@ -72,7 +72,7 @@ func (r *wishlistPermissionRepo) SaveWishlistPermission(ctx context.Context, per
 
 func (r *wishlistPermissionRepo) DeleteWishlistPermission(ctx context.Context, userID, wishlistID string) error {
 	query := `
-			DELETE FROM wishlists_permissions
+			DELETE FROM wishlist_permissions
 			WHERE user_id = $1
 				AND wishlist_id = $2`
 	_, err := r.q.Exec(ctx, query, userID, wishlistID)

@@ -2,6 +2,7 @@ package wish
 
 import (
 	"context"
+	"time"
 	"wishlister/internal/domain/entity"
 	"wishlister/internal/domain/repository"
 	"wishlister/internal/service"
@@ -120,6 +121,39 @@ func (uc *WishUsecase) DeleteWish(ctx context.Context, cmd DeleteWishCommand) er
 		}
 		wishRepo := rf.WishRepository()
 		err = wishRepo.DeleteWish(ctx, cmd.WishlistID, cmd.WishID)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (uc *WishUsecase) ReserveWish(ctx context.Context, cmd ReserveWishCommand) error {
+	uof := uc.uofFactory.NewUnitOfWork(true)
+	err := uof.Do(ctx, func(ctx context.Context, rf repository.RepositoryFactory) error {
+		svcFactory := service.NewServiceFactory(rf)
+		permissionService := svcFactory.WishlistPermissionService()
+		err := permissionService.CheckReservationInWishlist(
+			ctx, cmd.RequestorUserID, cmd.WishlistID,
+		)
+		if err != nil {
+			return err
+		}
+		wishRepo := rf.WishRepository()
+		wish, err := wishRepo.GetWish(ctx, cmd.WishlistID, cmd.WishID)
+		if err != nil {
+			return err
+		}
+		reserveTime := time.Now()
+		err = wish.Reserve(cmd.RequestorUserID, reserveTime)
+		if err != nil {
+			return err
+		}
+		err = wishRepo.UpdateWish(ctx, wish)
 		if err != nil {
 			return err
 		}

@@ -46,7 +46,8 @@ func NewWishlistHandler(
 	wishlistPermissiomGr.POST("", h.grantWishlistPermission)
 	wishlistPermissiomGr.DELETE("", h.revokeWishlistPermission)
 
-	NewWishHandler(wishlistIdGr, wishUc)
+	wishlistWishesGr := wishlistIdGr.Group("/wishes")
+	NewWishHandler(wishlistWishesGr, wishUc)
 
 	return h
 }

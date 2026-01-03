@@ -24,3 +24,15 @@ type DeleteWishCommand struct {
 	WishlistID      string
 	WishID          string
 }
+
+type ReserveWishCommand struct {
+	RequestorUserID string
+	WishlistID      string
+	WishID          string
+}
+
+type CancelWishReservationCommand struct {
+	RequestorUserID string
+	WishlistID      string
+	WishID          string
+}

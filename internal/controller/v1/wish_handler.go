@@ -17,21 +17,23 @@ type wishHandler struct {
 	wishUc *wishuc.WishUsecase
 }
 
-func NewWishHandler(wishlistGr *gin.RouterGroup,
+func NewWishHandler(wishGr *gin.RouterGroup,
 	wishesService *wishuc.WishUsecase,
 ) *wishHandler {
 	h := &wishHandler{
 		wishUc: wishesService,
 	}
 
-	wishlistGr.POST("/", h.createWish)
+	wishGr.POST("/", h.createWish)
 
 	const wishPathPart = "/:" + wishIdPathParam
-	wishGr := wishlistGr.Group(wishPathPart)
+	wishIdGr := wishGr.Group(wishPathPart)
 
-	wishGr.GET("", h.getWish)
-	wishGr.PATCH("/", h.updateWish)
-	wishGr.DELETE("/", h.deleteWish)
+	wishIdGr.GET("", h.getWish)
+	wishIdGr.PATCH("/", h.updateWish)
+	wishIdGr.DELETE("/", h.deleteWish)
+
+	wishIdGr.POST("/reserve", h.reserveWish)
 
 	return h
 }
@@ -106,6 +108,22 @@ func (h *wishHandler) deleteWish(c *gin.Context) {
 		WishID:          c.Param(wishIdPathParam),
 	}
 	err := h.wishUc.DeleteWish(ctx, cmd)
+	if err != nil {
+		c.Error(err)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{})
+}
+
+func (h *wishHandler) reserveWish(c *gin.Context) {
+	ctx := c.Request.Context()
+	au := auth.FromCtxOrEmpty(ctx)
+	cmd := wishuc.ReserveWishCommand{
+		RequestorUserID: au.UserID,
+		WishlistID:      c.Param(wishlistIdPathParam),
+		WishID:          c.Param(wishIdPathParam),
+	}
+	err := h.wishUc.ReserveWish(ctx, cmd)
 	if err != nil {
 		c.Error(err)
 		return

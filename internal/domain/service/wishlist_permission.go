@@ -26,9 +26,12 @@ type WishlistPermissionService interface {
 
 	CanReadWishlist(ctx context.Context, userID, wishlistID string) (bool, error)
 	CanModifyWishlist(ctx context.Context, userID, wishlistID string) (bool, error)
+	CanReserveInWishlist(ctx context.Context, userID, wishlistID string) (bool, error)
 
 	CheckReadWishlistAccess(ctx context.Context, userID, wishlistID string) error
 	CheckModifyWishlistAccess(ctx context.Context, userID, wishlistID string) error
+
+	CheckReservationInWishlist(ctx context.Context, userID, wishlistID string) error
 
 	GetPermissionsToWishlists(ctx context.Context, userID string) (entity.WishlistsPermissions, error)
 }

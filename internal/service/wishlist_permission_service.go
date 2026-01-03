@@ -109,6 +109,31 @@ func (s *wishlistPermissionService) CheckModifyWishlistAccess(ctx context.Contex
 	return nil
 }
 
+func (s *wishlistPermissionService) CanReserveInWishlist(ctx context.Context, userID, wishlistID string) (bool, error) {
+	permission, err := s.wishlistPermissionRepo.GetPermissionToWishlist(ctx, userID, wishlistID)
+	if err != nil {
+		return false, err
+	}
+	if permission == nil {
+		return false, nil
+	}
+	if !permission.Can(entity.ReserveWishWishlistAction) {
+		return false, nil
+	}
+	return true, nil
+}
+
+func (s *wishlistPermissionService) CheckReservationInWishlist(ctx context.Context, userID, wishlistID string) error {
+	canReserve, err := s.CanReserveInWishlist(ctx, userID, wishlistID)
+	if err != nil {
+		return err
+	}
+	if !canReserve {
+		return entity.ErrWishlistDoesNotExist
+	}
+	return nil
+}
+
 func (s *wishlistPermissionService) GetPermissionsToWishlists(ctx context.Context, userID string) (entity.WishlistsPermissions, error) {
 	permissions, err := s.wishlistPermissionRepo.GetPermissionsToWishlists(ctx, userID)
 	if err != nil {

@@ -1,4 +1,5 @@
-DELETE FROM wishlists_permissions;
+DELETE FROM wish_reservations;
+DELETE FROM wishlist_permissions;
 DELETE FROM wishes;
 DELETE FROM wishlists;
 DELETE FROM users;
@@ -15,7 +16,7 @@ VALUES
 ('bob_wishlist_1', 'bob', 'Bob Wishlist 1'),
 ('bob_wishlist_2', 'bob', 'Bob Wishlist 2');
 
-INSERT INTO wishlists_permissions(user_id, wishlist_id, permission_level)
+INSERT INTO wishlist_permissions(user_id, wishlist_id, permission_level)
 VALUES
 ('alice', 'alice_wishlist_1', 'owner'),
 ('alice', 'alice_wishlist_2', 'owner'),
