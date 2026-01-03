@@ -6,6 +6,11 @@ type GetWishCommand struct {
 	WishID          string
 }
 
+type GetWishesFromWishlistCommand struct {
+	RequestorUserID string
+	WishlistID      string
+}
+
 type CreateWishCommand struct {
 	RequestorUserID string
 	WishlistID      string

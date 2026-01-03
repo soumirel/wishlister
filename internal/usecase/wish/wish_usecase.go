@@ -48,6 +48,33 @@ func (uc *WishUsecase) GetWish(ctx context.Context, cmd GetWishCommand) (entity.
 	return wishRes, nil
 }
 
+func (uc *WishUsecase) GetWishesFromWishlist(ctx context.Context, cmd GetWishesFromWishlistCommand) ([]entity.Wish, error) {
+	uof := uc.uofFactory.NewUnitOfWork(true)
+	var wishesRes []entity.Wish
+	err := uof.Do(ctx, func(ctx context.Context, rf repository.RepositoryFactory) error {
+		svcFactory := service.NewServiceFactory(rf)
+		permSvc := svcFactory.WishlistPermissionService()
+		err := permSvc.CheckReadWishlistAccess(ctx, cmd.RequestorUserID, cmd.WishlistID)
+		if err != nil {
+			return err
+		}
+		wishRepo := rf.WishRepository()
+		wishes, err := wishRepo.GetWishesFromWishlist(ctx, cmd.WishlistID)
+		if err != nil {
+			return err
+		}
+		wishesRes = make([]entity.Wish, 0, len(wishes))
+		for _, w := range wishes {
+			wishesRes = append(wishesRes, *w)
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return wishesRes, nil
+}
+
 func (uc *WishUsecase) CreateWish(ctx context.Context, cmd CreateWishCommand) (entity.Wish, error) {
 	uof := uc.uofFactory.NewUnitOfWork(true)
 	var wishRes entity.Wish

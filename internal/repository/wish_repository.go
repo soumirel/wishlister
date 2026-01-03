@@ -20,16 +20,10 @@ func newWishRepository(q Querier) repository.WishRepository {
 	}
 }
 
-func (r *wishRepository) GetWish(ctx context.Context, wishlistID, wishID string) (*entity.Wish, error) {
-	query := `
-			SELECT 
-				w.id, w.wishlist_id, w.name,
-				r.id, r.reserved_by_user_id, r.reserved_at
-			FROM wishes w
-			LEFT JOIN wish_reservations r
-				ON r.wish_id = w.id
-			WHERE w.wishlist_id = $1
-				AND w.id = $2`
+// scanWishRow scans pgx.Row to entity.Wish
+// rows can be obtained from different sources (Query, QueryRow),
+// so the calling code must check ErrNoRows itself
+func (r *wishRepository) scanWishRow(row pgx.Row) (*entity.Wish, error) {
 	var (
 		wish        entity.Wish
 		reservation struct {
@@ -38,14 +32,11 @@ func (r *wishRepository) GetWish(ctx context.Context, wishlistID, wishID string)
 			ReservedAt       pgtype.Timestamptz
 		}
 	)
-	err := r.q.QueryRow(ctx, query, wishlistID, wishID).Scan(
+	err := row.Scan(
 		&wish.ID, &wish.WishlistID, &wish.Name,
 		&reservation.ID, &reservation.ReservedByUserID, &reservation.ReservedAt,
 	)
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, entity.ErrWishDoesNotExist
-		}
 		return nil, err
 	}
 	if reservation.ID.Valid {
@@ -56,6 +47,50 @@ func (r *wishRepository) GetWish(ctx context.Context, wishlistID, wishID string)
 		}
 	}
 	return &wish, nil
+}
+
+func (r *wishRepository) GetWish(ctx context.Context, wishlistID, wishID string) (*entity.Wish, error) {
+	query := `
+		SELECT 
+			w.id, w.wishlist_id, w.name,
+			r.id, r.reserved_by_user_id, r.reserved_at
+		FROM wishes w
+		LEFT JOIN wish_reservations r
+			ON r.wish_id = w.id
+		WHERE w.wishlist_id = $1
+			AND w.id = $2`
+	wish, err := r.scanWishRow(r.q.QueryRow(ctx, query, wishlistID, wishID))
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, entity.ErrWishDoesNotExist
+		}
+		return nil, err
+	}
+	return wish, nil
+}
+
+func (r *wishRepository) GetWishesFromWishlist(ctx context.Context, wishlistID string) ([]*entity.Wish, error) {
+	query := `
+		SELECT 
+			w.id, w.wishlist_id, w.name,
+			r.id, r.reserved_by_user_id, r.reserved_at
+		FROM wishes w
+		LEFT JOIN wish_reservations r
+			ON r.wish_id = w.id
+		WHERE w.wishlist_id = $1`
+
+	rows, err := r.q.Query(ctx, query, wishlistID)
+	wishes, err := pgx.CollectRows(rows, func(row pgx.CollectableRow) (*entity.Wish, error) {
+		wish, err := r.scanWishRow(row)
+		if err != nil {
+			return nil, err
+		}
+		return wish, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return wishes, nil
 }
 
 func (r *wishRepository) UpdateWish(ctx context.Context, wish *entity.Wish) error {

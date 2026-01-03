@@ -17,17 +17,18 @@ type wishHandler struct {
 	wishUc *wishuc.WishUsecase
 }
 
-func NewWishHandler(wishGr *gin.RouterGroup,
+func NewWishHandler(wishesGr *gin.RouterGroup,
 	wishesService *wishuc.WishUsecase,
 ) *wishHandler {
 	h := &wishHandler{
 		wishUc: wishesService,
 	}
 
-	wishGr.POST("/", h.createWish)
+	wishesGr.GET("/", h.getWishes)
+	wishesGr.POST("/", h.createWish)
 
 	const wishPathPart = "/:" + wishIdPathParam
-	wishIdGr := wishGr.Group(wishPathPart)
+	wishIdGr := wishesGr.Group(wishPathPart)
 
 	wishIdGr.GET("", h.getWish)
 	wishIdGr.PATCH("/", h.updateWish)
@@ -36,6 +37,21 @@ func NewWishHandler(wishGr *gin.RouterGroup,
 	wishIdGr.POST("/reserve", h.reserveWish)
 
 	return h
+}
+
+func (h *wishHandler) getWishes(c *gin.Context) {
+	ctx := c.Request.Context()
+	au := auth.FromCtxOrEmpty(ctx)
+	cmd := wishuc.GetWishesFromWishlistCommand{
+		RequestorUserID: au.UserID,
+		WishlistID:      c.Param(wishlistIdPathParam),
+	}
+	wishes, err := h.wishUc.GetWishesFromWishlist(ctx, cmd)
+	if err != nil {
+		c.Error(err)
+		return
+	}
+	c.JSON(http.StatusOK, wishes)
 }
 
 func (h *wishHandler) getWish(c *gin.Context) {
