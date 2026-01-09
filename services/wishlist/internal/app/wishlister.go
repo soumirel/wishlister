@@ -1,0 +1,36 @@
+package app
+
+import (
+	"log"
+	"os"
+
+	"github.com/soumirel/wishlister/wishlist/internal/controller"
+	"github.com/soumirel/wishlister/wishlist/internal/repository"
+	"github.com/soumirel/wishlister/wishlist/internal/uof"
+	useruc "github.com/soumirel/wishlister/wishlist/internal/usecase/user"
+
+	wishuc "github.com/soumirel/wishlister/wishlist/internal/usecase/wish"
+	wishlistuc "github.com/soumirel/wishlister/wishlist/internal/usecase/wishlist"
+	wishlistpermuc "github.com/soumirel/wishlister/wishlist/internal/usecase/wishlist_permission"
+)
+
+func Run() {
+	migrationsBytes, err := os.ReadFile("./db/init/init.sql")
+	if err != nil {
+		log.Fatal("open migrations file failed:", err.Error())
+	}
+	refreshScriptBytes, err := os.ReadFile("./db/refresh_test_data.sql")
+	if err != nil {
+		log.Fatal("open migrations file failed:", err.Error())
+	}
+	postgresClient := repository.InitPostgresClient(string(migrationsBytes), string(refreshScriptBytes))
+
+	uofFactory := uof.NewUnitOfWorkFactory(postgresClient)
+
+	userUc := useruc.NewUserUsecase(uofFactory)
+	wishlistUc := wishlistuc.NewWishlistUsecase(uofFactory)
+	wishUc := wishuc.NewWishUsecase(uofFactory)
+	wishlistPermissionUc := wishlistpermuc.NewWishlistPermissionUsecase(uofFactory)
+
+	controller.StartHttpServer(userUc, wishlistUc, wishUc, wishlistPermissionUc)
+}
