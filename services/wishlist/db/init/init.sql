@@ -56,4 +56,16 @@ CREATE TABLE IF NOT EXISTS wish_reservations(
     FOREIGN KEY(wish_id) REFERENCES wishes(id) ON DELETE CASCADE,
     FOREIGN KEY(reserved_by_user_id) REFERENCES users(id) ON DELETE CASCADE,
     UNIQUE(wish_id)
-)
+);
+
+CREATE TABLE IF NOT EXISTS external_user_identities(
+    id text NOT NULL,
+    user_id text NOT NULL,
+    external_id text NOT NULL,
+    provider text NOT NULL,
+
+    PRIMARY KEY(id),
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE(user_id, provider),
+    UNIQUE(external_id, provider)
+);

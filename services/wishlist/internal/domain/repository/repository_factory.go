@@ -5,4 +5,5 @@ type RepositoryFactory interface {
 	WishRepository() WishRepository
 	WishlistRepository() WishlistRepository
 	WishlistPermissionRepository() WishlistPermissionRepository
+	UserIdentityRepository() UserIdentityRepository
 }

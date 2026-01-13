@@ -5,6 +5,8 @@ import (
 
 	"github.com/soumirel/wishlister/wishlist/internal/domain/entity"
 	"github.com/soumirel/wishlister/wishlist/internal/domain/repository"
+	svcentity "github.com/soumirel/wishlister/wishlist/internal/domain/service"
+	"github.com/soumirel/wishlister/wishlist/internal/service"
 	"github.com/soumirel/wishlister/wishlist/internal/usecase"
 )
 
@@ -24,8 +26,8 @@ func (uc *UserUsecase) GetUsers(ctx context.Context, cmd GetUsersCommand) ([]ent
 	uof := uc.uofFactory.NewUnitOfWork(true)
 	var usersRes []entity.User
 	err := uof.Do(ctx, func(ctx context.Context, rf repository.RepositoryFactory) error {
-		userRepo := rf.UserRepository()
-		users, err := userRepo.GetUsers(ctx)
+		userService := service.NewServiceFactory(rf).UserService()
+		users, err := userService.GetUsers(ctx)
 		if err != nil {
 			return err
 		}
@@ -66,11 +68,10 @@ func (uc *UserUsecase) CreateUser(ctx context.Context, cmd CreateUserCommand) (e
 	uof := uc.uofFactory.NewUnitOfWork(true)
 	var userRes entity.User
 	err := uof.Do(ctx, func(ctx context.Context, rf repository.RepositoryFactory) error {
-		user := entity.NewUser()
-		user.Name = cmd.Name
-
-		userRepo := rf.UserRepository()
-		err := userRepo.CreateUser(ctx, user)
+		userService := service.NewServiceFactory(rf).UserService()
+		user, err := userService.CreateUser(ctx, svcentity.CreateUserOptions{
+			Name: cmd.Name,
+		})
 		if err != nil {
 			return err
 		}
@@ -86,8 +87,8 @@ func (uc *UserUsecase) CreateUser(ctx context.Context, cmd CreateUserCommand) (e
 func (uc *UserUsecase) DeleteUser(ctx context.Context, cmd DeleteUserCommand) error {
 	uof := uc.uofFactory.NewUnitOfWork(true)
 	err := uof.Do(ctx, func(ctx context.Context, rf repository.RepositoryFactory) error {
-		userRepo := rf.UserRepository()
-		err := userRepo.DeleteUser(ctx, cmd.UserID)
+		userService := service.NewServiceFactory(rf).UserService()
+		err := userService.DeleteUser(ctx, cmd.UserID)
 		if err != nil {
 			return err
 		}

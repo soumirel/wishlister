@@ -1,3 +1,4 @@
+DELETE FROM external_user_identities;
 DELETE FROM wish_reservations;
 DELETE FROM wishlist_permissions;
 DELETE FROM wishes;

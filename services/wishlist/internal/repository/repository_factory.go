@@ -29,3 +29,7 @@ func (f *repoFactory) WishlistRepository() repository.WishlistRepository {
 func (f *repoFactory) WishlistPermissionRepository() repository.WishlistPermissionRepository {
 	return newWishlistPersmissionRepository(f.q)
 }
+
+func (f *repoFactory) UserIdentityRepository() repository.UserIdentityRepository {
+	return newUserIdentityRepository(f.q)
+}
