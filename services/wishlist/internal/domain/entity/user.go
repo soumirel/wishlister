@@ -21,3 +21,8 @@ func NewUser() *User {
 		ID: id.String(),
 	}
 }
+
+func (u *User) UpdateName(name string) error {
+	u.Name = name
+	return nil
+}

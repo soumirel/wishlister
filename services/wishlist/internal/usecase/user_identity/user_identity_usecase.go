@@ -3,6 +3,7 @@ package useridentity
 import (
 	"context"
 
+	"github.com/gofrs/uuid/v5"
 	"github.com/soumirel/wishlister/wishlist/internal/domain/entity"
 	"github.com/soumirel/wishlister/wishlist/internal/domain/repository"
 	"github.com/soumirel/wishlister/wishlist/internal/service"
@@ -20,7 +21,9 @@ func NewUserIdentityUsecase(uofFactory usecase.UnitOfWorkFactory) *UserIdentityU
 }
 
 func (uc *UserIdentityUsecase) GetUserIdByExternalIdentity(ctx context.Context, cmd GetUserIdByExternalIdentityCommand) (string, error) {
-	externalIdentity, err := entity.NewExternalIdentity(cmd.ExternalID, entity.IdentityProvider(cmd.IdentityProvider))
+	externalIdentity, err := entity.NewExternalIdentity(
+		cmd.ExternalID, entity.IdentityProvider(cmd.IdentityProvider),
+	)
 	if err != nil {
 		return "", err
 	}
@@ -29,8 +32,9 @@ func (uc *UserIdentityUsecase) GetUserIdByExternalIdentity(ctx context.Context, 
 		userID string
 	)
 	err = uof.Do(ctx, func(ctx context.Context, rf repository.RepositoryFactory) error {
-		identityRepo := rf.UserIdentityRepository()
-		userID, err = identityRepo.GetUserIdByExternalIdentity(ctx, externalIdentity)
+
+		svcFactory := service.NewServiceFactory(rf)
+		userID, err = svcFactory.UserIdentityService().GetUserIdByExternalIdentity(ctx, externalIdentity)
 		if err != nil {
 			return err
 		}
@@ -76,7 +80,11 @@ func (uc *UserIdentityUsecase) CreateUserFromExternalIdentity(ctx context.Contex
 	)
 	err := uof.Do(ctx, func(ctx context.Context, rf repository.RepositoryFactory) error {
 		user := entity.NewUser()
-		err := rf.UserRepository().CreateUser(ctx, user)
+		err := user.UpdateName(uuid.Must(uuid.NewV4()).String()[:8])
+		if err != nil {
+			return err
+		}
+		err = rf.UserRepository().CreateUser(ctx, user)
 		if err != nil {
 			return err
 		}

@@ -1,8 +1,7 @@
 package controller
 
 import (
-	v1 "github.com/soumirel/wishlister/wishlist/internal/controller/v1"
-
+	"github.com/soumirel/wishlister/wishlist/internal/controller/http/v1/middleware"
 	useruc "github.com/soumirel/wishlister/wishlist/internal/usecase/user"
 	wishuc "github.com/soumirel/wishlister/wishlist/internal/usecase/wish"
 	wishlistuc "github.com/soumirel/wishlister/wishlist/internal/usecase/wishlist"
@@ -11,23 +10,22 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const (
-	serverAddr = ":8080"
-)
-
-func StartHttpServer(
+func BindHandlers(
+	gr *gin.RouterGroup,
 	userUc *useruc.UserUsecase,
 	wishlistUc *wishlistuc.WishlistUsecase,
 	wishUc *wishuc.WishUsecase,
 	wishlistPermissionUc *wishlistpermuc.WishlistPermissionUsecase,
 ) {
-	e := gin.New()
 
-	{
-		v1Group := e.Group("/v1")
+	wishlistsGr := gr.Group("/wishlists",
+		middleware.AuthMiddleware(),
+		middleware.ErrorHandler(),
+	)
+	NewWishlistHandler(wishlistsGr, wishlistUc, wishUc, wishlistPermissionUc)
 
-		v1.BindHandlers(v1Group, userUc, wishlistUc, wishUc, wishlistPermissionUc)
-	}
-
-	e.Run(serverAddr)
+	usersGr := gr.Group("/users",
+		middleware.ErrorHandler(),
+	)
+	NewUserHandler(usersGr, userUc)
 }

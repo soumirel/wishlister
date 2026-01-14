@@ -4,10 +4,13 @@ import (
 	"log"
 	"os"
 
-	"github.com/soumirel/wishlister/wishlist/internal/controller"
+	httpController "github.com/soumirel/wishlister/wishlist/internal/controller/http"
+
+	grpcController "github.com/soumirel/wishlister/wishlist/internal/controller/grpc"
 	"github.com/soumirel/wishlister/wishlist/internal/repository"
 	"github.com/soumirel/wishlister/wishlist/internal/uof"
 	useruc "github.com/soumirel/wishlister/wishlist/internal/usecase/user"
+	useridentity "github.com/soumirel/wishlister/wishlist/internal/usecase/user_identity"
 
 	wishuc "github.com/soumirel/wishlister/wishlist/internal/usecase/wish"
 	wishlistuc "github.com/soumirel/wishlister/wishlist/internal/usecase/wishlist"
@@ -31,6 +34,10 @@ func Run() {
 	wishlistUc := wishlistuc.NewWishlistUsecase(uofFactory)
 	wishUc := wishuc.NewWishUsecase(uofFactory)
 	wishlistPermissionUc := wishlistpermuc.NewWishlistPermissionUsecase(uofFactory)
+	userIdentityUc := useridentity.NewUserIdentityUsecase(uofFactory)
 
-	controller.StartHttpServer(userUc, wishlistUc, wishUc, wishlistPermissionUc)
+	httpController.StartHttpServer(userUc, wishlistUc, wishUc, wishlistPermissionUc)
+	grpcController.StartGrpcServer(userIdentityUc)
+
+	select {}
 }

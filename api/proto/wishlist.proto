@@ -1,0 +1,30 @@
+syntax = "proto3";
+package wishlist;
+
+option go_package = "github.com/soumirel/wishlister/api/proto/wishlist";
+
+message ExternalIdentity {
+    string ExternalID = 1;
+    string IdentityProvider = 2;
+}
+
+message GetUserIdByExternalIdentityRequest {
+    ExternalIdentity ExternalIdentity = 1;
+}
+
+message GetUserIdByExternalIdentityResponse {
+    string UserID = 1;
+}
+
+message CreateUserFromExternalIdentityRequest {
+    ExternalIdentity ExternalIdentity = 1;
+}
+
+message CreateUserFromExternalIdentityResponse {
+    string UserID = 1;
+}
+
+service Wishlist {
+    rpc GetUserIdByExternalIdentity(GetUserIdByExternalIdentityRequest) returns (GetUserIdByExternalIdentityResponse);
+    rpc CreateUserFromExternalIdentity(CreateUserFromExternalIdentityRequest) returns (CreateUserFromExternalIdentityResponse);
+}
