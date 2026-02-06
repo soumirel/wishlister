@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres
+    image: postgres:18-alpine
     container_name: postgres-wishlister
     restart: unless-stopped
     environment:
@@ -11,12 +11,40 @@ services:
       - "127.0.0.1:5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql
-      - ./db/init:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U wishlister"]
       interval: 5s
       timeout: 3s
       retries: 5
+    networks:
+      - wishlister-network
+  wishlister-core:
+    build:
+      context: ./services/wishlist/
+      dockerfile: ./deployments/Dockerfile
+    container_name: wishlister-core
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5432:5432"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - wishlister-network
+    volumes:
+      - ./db/init/init.sql:/app/init.sql:ro
+      - ./db/refresh_test_data.sql:/refresh_test_data.sql:ro
+
 
 volumes:
   postgres-data:
+
+networks:
+  wishlister-network:
+    driver: bridge

@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"net/http"
+
 	v1 "github.com/soumirel/wishlister/wishlist/internal/controller/http/v1"
 
 	useruc "github.com/soumirel/wishlister/wishlist/internal/usecase/user"
@@ -9,6 +11,7 @@ import (
 	wishlistpermuc "github.com/soumirel/wishlister/wishlist/internal/usecase/wishlist_permission"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/render"
 )
 
 const (
@@ -22,6 +25,12 @@ func StartHttpServer(
 	wishlistPermissionUc *wishlistpermuc.WishlistPermissionUsecase,
 ) {
 	e := gin.New()
+
+	{
+		e.GET("/health", func(ctx *gin.Context) {
+			ctx.Render(http.StatusOK, render.String{})
+		})
+	}
 
 	{
 		v1Group := e.Group("/v1")

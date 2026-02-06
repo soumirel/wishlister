@@ -3,6 +3,14 @@ package wishlist;
 
 option go_package = "github.com/soumirel/wishlister/api/proto/wishlist";
 
+//
+message Wishlist {
+    string ID = 1;
+    string UserID = 2;
+    string Name = 3;
+}
+
+//
 message ExternalIdentity {
     string ExternalID = 1;
     string IdentityProvider = 2;
@@ -24,7 +32,21 @@ message CreateUserFromExternalIdentityResponse {
     string UserID = 1;
 }
 
-service Wishlist {
+message GetWishlistsRequest {
+}
+
+message GetWishlistsResponse {
+    repeated Wishlist Wishlists = 1;
+}
+
+// 
+service WishlistService {
+    //
     rpc GetUserIdByExternalIdentity(GetUserIdByExternalIdentityRequest) returns (GetUserIdByExternalIdentityResponse);
+    
+    //
     rpc CreateUserFromExternalIdentity(CreateUserFromExternalIdentityRequest) returns (CreateUserFromExternalIdentityResponse);
+
+    //
+    rpc GetWishlists(GetUserIdByExternalIdentityRequest) returns (GetWishlistsResponse);
 }

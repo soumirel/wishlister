@@ -21,6 +21,66 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type Wishlist struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ID            string                 `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	UserID        string                 `protobuf:"bytes,2,opt,name=UserID,proto3" json:"UserID,omitempty"`
+	Name          string                 `protobuf:"bytes,3,opt,name=Name,proto3" json:"Name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Wishlist) Reset() {
+	*x = Wishlist{}
+	mi := &file_wishlist_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Wishlist) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Wishlist) ProtoMessage() {}
+
+func (x *Wishlist) ProtoReflect() protoreflect.Message {
+	mi := &file_wishlist_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Wishlist.ProtoReflect.Descriptor instead.
+func (*Wishlist) Descriptor() ([]byte, []int) {
+	return file_wishlist_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *Wishlist) GetID() string {
+	if x != nil {
+		return x.ID
+	}
+	return ""
+}
+
+func (x *Wishlist) GetUserID() string {
+	if x != nil {
+		return x.UserID
+	}
+	return ""
+}
+
+func (x *Wishlist) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
 type ExternalIdentity struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	ExternalID       string                 `protobuf:"bytes,1,opt,name=ExternalID,proto3" json:"ExternalID,omitempty"`
@@ -31,7 +91,7 @@ type ExternalIdentity struct {
 
 func (x *ExternalIdentity) Reset() {
 	*x = ExternalIdentity{}
-	mi := &file_wishlist_proto_msgTypes[0]
+	mi := &file_wishlist_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -43,7 +103,7 @@ func (x *ExternalIdentity) String() string {
 func (*ExternalIdentity) ProtoMessage() {}
 
 func (x *ExternalIdentity) ProtoReflect() protoreflect.Message {
-	mi := &file_wishlist_proto_msgTypes[0]
+	mi := &file_wishlist_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -56,7 +116,7 @@ func (x *ExternalIdentity) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExternalIdentity.ProtoReflect.Descriptor instead.
 func (*ExternalIdentity) Descriptor() ([]byte, []int) {
-	return file_wishlist_proto_rawDescGZIP(), []int{0}
+	return file_wishlist_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *ExternalIdentity) GetExternalID() string {
@@ -82,7 +142,7 @@ type GetUserIdByExternalIdentityRequest struct {
 
 func (x *GetUserIdByExternalIdentityRequest) Reset() {
 	*x = GetUserIdByExternalIdentityRequest{}
-	mi := &file_wishlist_proto_msgTypes[1]
+	mi := &file_wishlist_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -94,7 +154,7 @@ func (x *GetUserIdByExternalIdentityRequest) String() string {
 func (*GetUserIdByExternalIdentityRequest) ProtoMessage() {}
 
 func (x *GetUserIdByExternalIdentityRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_wishlist_proto_msgTypes[1]
+	mi := &file_wishlist_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -107,7 +167,7 @@ func (x *GetUserIdByExternalIdentityRequest) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use GetUserIdByExternalIdentityRequest.ProtoReflect.Descriptor instead.
 func (*GetUserIdByExternalIdentityRequest) Descriptor() ([]byte, []int) {
-	return file_wishlist_proto_rawDescGZIP(), []int{1}
+	return file_wishlist_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetUserIdByExternalIdentityRequest) GetExternalIdentity() *ExternalIdentity {
@@ -126,7 +186,7 @@ type GetUserIdByExternalIdentityResponse struct {
 
 func (x *GetUserIdByExternalIdentityResponse) Reset() {
 	*x = GetUserIdByExternalIdentityResponse{}
-	mi := &file_wishlist_proto_msgTypes[2]
+	mi := &file_wishlist_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -138,7 +198,7 @@ func (x *GetUserIdByExternalIdentityResponse) String() string {
 func (*GetUserIdByExternalIdentityResponse) ProtoMessage() {}
 
 func (x *GetUserIdByExternalIdentityResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_wishlist_proto_msgTypes[2]
+	mi := &file_wishlist_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -151,7 +211,7 @@ func (x *GetUserIdByExternalIdentityResponse) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use GetUserIdByExternalIdentityResponse.ProtoReflect.Descriptor instead.
 func (*GetUserIdByExternalIdentityResponse) Descriptor() ([]byte, []int) {
-	return file_wishlist_proto_rawDescGZIP(), []int{2}
+	return file_wishlist_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GetUserIdByExternalIdentityResponse) GetUserID() string {
@@ -170,7 +230,7 @@ type CreateUserFromExternalIdentityRequest struct {
 
 func (x *CreateUserFromExternalIdentityRequest) Reset() {
 	*x = CreateUserFromExternalIdentityRequest{}
-	mi := &file_wishlist_proto_msgTypes[3]
+	mi := &file_wishlist_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -182,7 +242,7 @@ func (x *CreateUserFromExternalIdentityRequest) String() string {
 func (*CreateUserFromExternalIdentityRequest) ProtoMessage() {}
 
 func (x *CreateUserFromExternalIdentityRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_wishlist_proto_msgTypes[3]
+	mi := &file_wishlist_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -195,7 +255,7 @@ func (x *CreateUserFromExternalIdentityRequest) ProtoReflect() protoreflect.Mess
 
 // Deprecated: Use CreateUserFromExternalIdentityRequest.ProtoReflect.Descriptor instead.
 func (*CreateUserFromExternalIdentityRequest) Descriptor() ([]byte, []int) {
-	return file_wishlist_proto_rawDescGZIP(), []int{3}
+	return file_wishlist_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CreateUserFromExternalIdentityRequest) GetExternalIdentity() *ExternalIdentity {
@@ -214,7 +274,7 @@ type CreateUserFromExternalIdentityResponse struct {
 
 func (x *CreateUserFromExternalIdentityResponse) Reset() {
 	*x = CreateUserFromExternalIdentityResponse{}
-	mi := &file_wishlist_proto_msgTypes[4]
+	mi := &file_wishlist_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -226,7 +286,7 @@ func (x *CreateUserFromExternalIdentityResponse) String() string {
 func (*CreateUserFromExternalIdentityResponse) ProtoMessage() {}
 
 func (x *CreateUserFromExternalIdentityResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_wishlist_proto_msgTypes[4]
+	mi := &file_wishlist_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -239,7 +299,7 @@ func (x *CreateUserFromExternalIdentityResponse) ProtoReflect() protoreflect.Mes
 
 // Deprecated: Use CreateUserFromExternalIdentityResponse.ProtoReflect.Descriptor instead.
 func (*CreateUserFromExternalIdentityResponse) Descriptor() ([]byte, []int) {
-	return file_wishlist_proto_rawDescGZIP(), []int{4}
+	return file_wishlist_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *CreateUserFromExternalIdentityResponse) GetUserID() string {
@@ -249,11 +309,95 @@ func (x *CreateUserFromExternalIdentityResponse) GetUserID() string {
 	return ""
 }
 
+type GetWishlistsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetWishlistsRequest) Reset() {
+	*x = GetWishlistsRequest{}
+	mi := &file_wishlist_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetWishlistsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetWishlistsRequest) ProtoMessage() {}
+
+func (x *GetWishlistsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_wishlist_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetWishlistsRequest.ProtoReflect.Descriptor instead.
+func (*GetWishlistsRequest) Descriptor() ([]byte, []int) {
+	return file_wishlist_proto_rawDescGZIP(), []int{6}
+}
+
+type GetWishlistsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Wishlists     []*Wishlist            `protobuf:"bytes,1,rep,name=Wishlists,proto3" json:"Wishlists,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetWishlistsResponse) Reset() {
+	*x = GetWishlistsResponse{}
+	mi := &file_wishlist_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetWishlistsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetWishlistsResponse) ProtoMessage() {}
+
+func (x *GetWishlistsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_wishlist_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetWishlistsResponse.ProtoReflect.Descriptor instead.
+func (*GetWishlistsResponse) Descriptor() ([]byte, []int) {
+	return file_wishlist_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GetWishlistsResponse) GetWishlists() []*Wishlist {
+	if x != nil {
+		return x.Wishlists
+	}
+	return nil
+}
+
 var File_wishlist_proto protoreflect.FileDescriptor
 
 const file_wishlist_proto_rawDesc = "" +
 	"\n" +
-	"\x0ewishlist.proto\x12\bwishlist\"^\n" +
+	"\x0ewishlist.proto\x12\bwishlist\"F\n" +
+	"\bWishlist\x12\x0e\n" +
+	"\x02ID\x18\x01 \x01(\tR\x02ID\x12\x16\n" +
+	"\x06UserID\x18\x02 \x01(\tR\x06UserID\x12\x12\n" +
+	"\x04Name\x18\x03 \x01(\tR\x04Name\"^\n" +
 	"\x10ExternalIdentity\x12\x1e\n" +
 	"\n" +
 	"ExternalID\x18\x01 \x01(\tR\n" +
@@ -266,10 +410,14 @@ const file_wishlist_proto_rawDesc = "" +
 	"%CreateUserFromExternalIdentityRequest\x12F\n" +
 	"\x10ExternalIdentity\x18\x01 \x01(\v2\x1a.wishlist.ExternalIdentityR\x10ExternalIdentity\"@\n" +
 	"&CreateUserFromExternalIdentityResponse\x12\x16\n" +
-	"\x06UserID\x18\x01 \x01(\tR\x06UserID2\x8c\x02\n" +
-	"\bWishlist\x12z\n" +
+	"\x06UserID\x18\x01 \x01(\tR\x06UserID\"\x15\n" +
+	"\x13GetWishlistsRequest\"H\n" +
+	"\x14GetWishlistsResponse\x120\n" +
+	"\tWishlists\x18\x01 \x03(\v2\x12.wishlist.WishlistR\tWishlists2\xf1\x02\n" +
+	"\x0fWishlistService\x12z\n" +
 	"\x1bGetUserIdByExternalIdentity\x12,.wishlist.GetUserIdByExternalIdentityRequest\x1a-.wishlist.GetUserIdByExternalIdentityResponse\x12\x83\x01\n" +
-	"\x1eCreateUserFromExternalIdentity\x12/.wishlist.CreateUserFromExternalIdentityRequest\x1a0.wishlist.CreateUserFromExternalIdentityResponseB3Z1github.com/soumirel/wishlister/api/proto/wishlistb\x06proto3"
+	"\x1eCreateUserFromExternalIdentity\x12/.wishlist.CreateUserFromExternalIdentityRequest\x1a0.wishlist.CreateUserFromExternalIdentityResponse\x12\\\n" +
+	"\fGetWishlists\x12,.wishlist.GetUserIdByExternalIdentityRequest\x1a\x1e.wishlist.GetWishlistsResponseB3Z1github.com/soumirel/wishlister/api/proto/wishlistb\x06proto3"
 
 var (
 	file_wishlist_proto_rawDescOnce sync.Once
@@ -283,26 +431,32 @@ func file_wishlist_proto_rawDescGZIP() []byte {
 	return file_wishlist_proto_rawDescData
 }
 
-var file_wishlist_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_wishlist_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_wishlist_proto_goTypes = []any{
-	(*ExternalIdentity)(nil),                       // 0: wishlist.ExternalIdentity
-	(*GetUserIdByExternalIdentityRequest)(nil),     // 1: wishlist.GetUserIdByExternalIdentityRequest
-	(*GetUserIdByExternalIdentityResponse)(nil),    // 2: wishlist.GetUserIdByExternalIdentityResponse
-	(*CreateUserFromExternalIdentityRequest)(nil),  // 3: wishlist.CreateUserFromExternalIdentityRequest
-	(*CreateUserFromExternalIdentityResponse)(nil), // 4: wishlist.CreateUserFromExternalIdentityResponse
+	(*Wishlist)(nil),                               // 0: wishlist.Wishlist
+	(*ExternalIdentity)(nil),                       // 1: wishlist.ExternalIdentity
+	(*GetUserIdByExternalIdentityRequest)(nil),     // 2: wishlist.GetUserIdByExternalIdentityRequest
+	(*GetUserIdByExternalIdentityResponse)(nil),    // 3: wishlist.GetUserIdByExternalIdentityResponse
+	(*CreateUserFromExternalIdentityRequest)(nil),  // 4: wishlist.CreateUserFromExternalIdentityRequest
+	(*CreateUserFromExternalIdentityResponse)(nil), // 5: wishlist.CreateUserFromExternalIdentityResponse
+	(*GetWishlistsRequest)(nil),                    // 6: wishlist.GetWishlistsRequest
+	(*GetWishlistsResponse)(nil),                   // 7: wishlist.GetWishlistsResponse
 }
 var file_wishlist_proto_depIdxs = []int32{
-	0, // 0: wishlist.GetUserIdByExternalIdentityRequest.ExternalIdentity:type_name -> wishlist.ExternalIdentity
-	0, // 1: wishlist.CreateUserFromExternalIdentityRequest.ExternalIdentity:type_name -> wishlist.ExternalIdentity
-	1, // 2: wishlist.Wishlist.GetUserIdByExternalIdentity:input_type -> wishlist.GetUserIdByExternalIdentityRequest
-	3, // 3: wishlist.Wishlist.CreateUserFromExternalIdentity:input_type -> wishlist.CreateUserFromExternalIdentityRequest
-	2, // 4: wishlist.Wishlist.GetUserIdByExternalIdentity:output_type -> wishlist.GetUserIdByExternalIdentityResponse
-	4, // 5: wishlist.Wishlist.CreateUserFromExternalIdentity:output_type -> wishlist.CreateUserFromExternalIdentityResponse
-	4, // [4:6] is the sub-list for method output_type
-	2, // [2:4] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	1, // 0: wishlist.GetUserIdByExternalIdentityRequest.ExternalIdentity:type_name -> wishlist.ExternalIdentity
+	1, // 1: wishlist.CreateUserFromExternalIdentityRequest.ExternalIdentity:type_name -> wishlist.ExternalIdentity
+	0, // 2: wishlist.GetWishlistsResponse.Wishlists:type_name -> wishlist.Wishlist
+	2, // 3: wishlist.WishlistService.GetUserIdByExternalIdentity:input_type -> wishlist.GetUserIdByExternalIdentityRequest
+	4, // 4: wishlist.WishlistService.CreateUserFromExternalIdentity:input_type -> wishlist.CreateUserFromExternalIdentityRequest
+	2, // 5: wishlist.WishlistService.GetWishlists:input_type -> wishlist.GetUserIdByExternalIdentityRequest
+	3, // 6: wishlist.WishlistService.GetUserIdByExternalIdentity:output_type -> wishlist.GetUserIdByExternalIdentityResponse
+	5, // 7: wishlist.WishlistService.CreateUserFromExternalIdentity:output_type -> wishlist.CreateUserFromExternalIdentityResponse
+	7, // 8: wishlist.WishlistService.GetWishlists:output_type -> wishlist.GetWishlistsResponse
+	6, // [6:9] is the sub-list for method output_type
+	3, // [3:6] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_wishlist_proto_init() }
@@ -316,7 +470,7 @@ func file_wishlist_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_wishlist_proto_rawDesc), len(file_wishlist_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

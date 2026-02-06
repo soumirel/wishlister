@@ -19,139 +19,177 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Wishlist_GetUserIdByExternalIdentity_FullMethodName    = "/wishlist.Wishlist/GetUserIdByExternalIdentity"
-	Wishlist_CreateUserFromExternalIdentity_FullMethodName = "/wishlist.Wishlist/CreateUserFromExternalIdentity"
+	WishlistService_GetUserIdByExternalIdentity_FullMethodName    = "/wishlist.WishlistService/GetUserIdByExternalIdentity"
+	WishlistService_CreateUserFromExternalIdentity_FullMethodName = "/wishlist.WishlistService/CreateUserFromExternalIdentity"
+	WishlistService_GetWishlists_FullMethodName                   = "/wishlist.WishlistService/GetWishlists"
 )
 
-// WishlistClient is the client API for Wishlist service.
+// WishlistServiceClient is the client API for WishlistService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type WishlistClient interface {
+type WishlistServiceClient interface {
 	GetUserIdByExternalIdentity(ctx context.Context, in *GetUserIdByExternalIdentityRequest, opts ...grpc.CallOption) (*GetUserIdByExternalIdentityResponse, error)
 	CreateUserFromExternalIdentity(ctx context.Context, in *CreateUserFromExternalIdentityRequest, opts ...grpc.CallOption) (*CreateUserFromExternalIdentityResponse, error)
+	GetWishlists(ctx context.Context, in *GetUserIdByExternalIdentityRequest, opts ...grpc.CallOption) (*GetWishlistsResponse, error)
 }
 
-type wishlistClient struct {
+type wishlistServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewWishlistClient(cc grpc.ClientConnInterface) WishlistClient {
-	return &wishlistClient{cc}
+func NewWishlistServiceClient(cc grpc.ClientConnInterface) WishlistServiceClient {
+	return &wishlistServiceClient{cc}
 }
 
-func (c *wishlistClient) GetUserIdByExternalIdentity(ctx context.Context, in *GetUserIdByExternalIdentityRequest, opts ...grpc.CallOption) (*GetUserIdByExternalIdentityResponse, error) {
+func (c *wishlistServiceClient) GetUserIdByExternalIdentity(ctx context.Context, in *GetUserIdByExternalIdentityRequest, opts ...grpc.CallOption) (*GetUserIdByExternalIdentityResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetUserIdByExternalIdentityResponse)
-	err := c.cc.Invoke(ctx, Wishlist_GetUserIdByExternalIdentity_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, WishlistService_GetUserIdByExternalIdentity_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *wishlistClient) CreateUserFromExternalIdentity(ctx context.Context, in *CreateUserFromExternalIdentityRequest, opts ...grpc.CallOption) (*CreateUserFromExternalIdentityResponse, error) {
+func (c *wishlistServiceClient) CreateUserFromExternalIdentity(ctx context.Context, in *CreateUserFromExternalIdentityRequest, opts ...grpc.CallOption) (*CreateUserFromExternalIdentityResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreateUserFromExternalIdentityResponse)
-	err := c.cc.Invoke(ctx, Wishlist_CreateUserFromExternalIdentity_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, WishlistService_CreateUserFromExternalIdentity_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// WishlistServer is the server API for Wishlist service.
-// All implementations must embed UnimplementedWishlistServer
-// for forward compatibility.
-type WishlistServer interface {
-	GetUserIdByExternalIdentity(context.Context, *GetUserIdByExternalIdentityRequest) (*GetUserIdByExternalIdentityResponse, error)
-	CreateUserFromExternalIdentity(context.Context, *CreateUserFromExternalIdentityRequest) (*CreateUserFromExternalIdentityResponse, error)
-	mustEmbedUnimplementedWishlistServer()
+func (c *wishlistServiceClient) GetWishlists(ctx context.Context, in *GetUserIdByExternalIdentityRequest, opts ...grpc.CallOption) (*GetWishlistsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetWishlistsResponse)
+	err := c.cc.Invoke(ctx, WishlistService_GetWishlists_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
-// UnimplementedWishlistServer must be embedded to have
+// WishlistServiceServer is the server API for WishlistService service.
+// All implementations must embed UnimplementedWishlistServiceServer
+// for forward compatibility.
+type WishlistServiceServer interface {
+	GetUserIdByExternalIdentity(context.Context, *GetUserIdByExternalIdentityRequest) (*GetUserIdByExternalIdentityResponse, error)
+	CreateUserFromExternalIdentity(context.Context, *CreateUserFromExternalIdentityRequest) (*CreateUserFromExternalIdentityResponse, error)
+	GetWishlists(context.Context, *GetUserIdByExternalIdentityRequest) (*GetWishlistsResponse, error)
+	mustEmbedUnimplementedWishlistServiceServer()
+}
+
+// UnimplementedWishlistServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedWishlistServer struct{}
+type UnimplementedWishlistServiceServer struct{}
 
-func (UnimplementedWishlistServer) GetUserIdByExternalIdentity(context.Context, *GetUserIdByExternalIdentityRequest) (*GetUserIdByExternalIdentityResponse, error) {
+func (UnimplementedWishlistServiceServer) GetUserIdByExternalIdentity(context.Context, *GetUserIdByExternalIdentityRequest) (*GetUserIdByExternalIdentityResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetUserIdByExternalIdentity not implemented")
 }
-func (UnimplementedWishlistServer) CreateUserFromExternalIdentity(context.Context, *CreateUserFromExternalIdentityRequest) (*CreateUserFromExternalIdentityResponse, error) {
+func (UnimplementedWishlistServiceServer) CreateUserFromExternalIdentity(context.Context, *CreateUserFromExternalIdentityRequest) (*CreateUserFromExternalIdentityResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateUserFromExternalIdentity not implemented")
 }
-func (UnimplementedWishlistServer) mustEmbedUnimplementedWishlistServer() {}
-func (UnimplementedWishlistServer) testEmbeddedByValue()                  {}
+func (UnimplementedWishlistServiceServer) GetWishlists(context.Context, *GetUserIdByExternalIdentityRequest) (*GetWishlistsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetWishlists not implemented")
+}
+func (UnimplementedWishlistServiceServer) mustEmbedUnimplementedWishlistServiceServer() {}
+func (UnimplementedWishlistServiceServer) testEmbeddedByValue()                         {}
 
-// UnsafeWishlistServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to WishlistServer will
+// UnsafeWishlistServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to WishlistServiceServer will
 // result in compilation errors.
-type UnsafeWishlistServer interface {
-	mustEmbedUnimplementedWishlistServer()
+type UnsafeWishlistServiceServer interface {
+	mustEmbedUnimplementedWishlistServiceServer()
 }
 
-func RegisterWishlistServer(s grpc.ServiceRegistrar, srv WishlistServer) {
-	// If the following call panics, it indicates UnimplementedWishlistServer was
+func RegisterWishlistServiceServer(s grpc.ServiceRegistrar, srv WishlistServiceServer) {
+	// If the following call panics, it indicates UnimplementedWishlistServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&Wishlist_ServiceDesc, srv)
+	s.RegisterService(&WishlistService_ServiceDesc, srv)
 }
 
-func _Wishlist_GetUserIdByExternalIdentity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _WishlistService_GetUserIdByExternalIdentity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetUserIdByExternalIdentityRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(WishlistServer).GetUserIdByExternalIdentity(ctx, in)
+		return srv.(WishlistServiceServer).GetUserIdByExternalIdentity(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Wishlist_GetUserIdByExternalIdentity_FullMethodName,
+		FullMethod: WishlistService_GetUserIdByExternalIdentity_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WishlistServer).GetUserIdByExternalIdentity(ctx, req.(*GetUserIdByExternalIdentityRequest))
+		return srv.(WishlistServiceServer).GetUserIdByExternalIdentity(ctx, req.(*GetUserIdByExternalIdentityRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Wishlist_CreateUserFromExternalIdentity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _WishlistService_CreateUserFromExternalIdentity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateUserFromExternalIdentityRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(WishlistServer).CreateUserFromExternalIdentity(ctx, in)
+		return srv.(WishlistServiceServer).CreateUserFromExternalIdentity(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Wishlist_CreateUserFromExternalIdentity_FullMethodName,
+		FullMethod: WishlistService_CreateUserFromExternalIdentity_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WishlistServer).CreateUserFromExternalIdentity(ctx, req.(*CreateUserFromExternalIdentityRequest))
+		return srv.(WishlistServiceServer).CreateUserFromExternalIdentity(ctx, req.(*CreateUserFromExternalIdentityRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Wishlist_ServiceDesc is the grpc.ServiceDesc for Wishlist service.
+func _WishlistService_GetWishlists_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserIdByExternalIdentityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WishlistServiceServer).GetWishlists(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WishlistService_GetWishlists_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WishlistServiceServer).GetWishlists(ctx, req.(*GetUserIdByExternalIdentityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// WishlistService_ServiceDesc is the grpc.ServiceDesc for WishlistService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Wishlist_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "wishlist.Wishlist",
-	HandlerType: (*WishlistServer)(nil),
+var WishlistService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "wishlist.WishlistService",
+	HandlerType: (*WishlistServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetUserIdByExternalIdentity",
-			Handler:    _Wishlist_GetUserIdByExternalIdentity_Handler,
+			Handler:    _WishlistService_GetUserIdByExternalIdentity_Handler,
 		},
 		{
 			MethodName: "CreateUserFromExternalIdentity",
-			Handler:    _Wishlist_CreateUserFromExternalIdentity_Handler,
+			Handler:    _WishlistService_CreateUserFromExternalIdentity_Handler,
+		},
+		{
+			MethodName: "GetWishlists",
+			Handler:    _WishlistService_GetWishlists_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

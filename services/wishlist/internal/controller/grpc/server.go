@@ -2,16 +2,20 @@ package grpc
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net"
 
 	pb "github.com/soumirel/wishlister/api/proto/wishlist"
+	"github.com/soumirel/wishlister/wishlist/internal/domain/entity"
 	useridentuc "github.com/soumirel/wishlister/wishlist/internal/usecase/user_identity"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type grpcServer struct {
-	pb.UnimplementedWishlistServer
+	pb.UnimplementedWishlistServiceServer
 
 	userIdentityUc *useridentuc.UserIdentityUsecase
 }
@@ -34,6 +38,14 @@ func (s *grpcServer) CreateUserFromExternalIdentity(
 	return &resp, nil
 }
 
+func (s *grpcServer) GetWishlists(
+	ctx context.Context, req *pb.GetUserIdByExternalIdentityRequest,
+) (
+	*pb.GetWishlistsResponse, error,
+) {
+	return nil, status.Error(codes.Unimplemented, "method GetWishlists not implemented")
+}
+
 func (s *grpcServer) GetUserIdByExternalIdentity(
 	ctx context.Context, req *pb.GetUserIdByExternalIdentityRequest,
 ) (
@@ -45,6 +57,10 @@ func (s *grpcServer) GetUserIdByExternalIdentity(
 	}
 	userID, err := s.userIdentityUc.GetUserIdByExternalIdentity(ctx, cmd)
 	if err != nil {
+		switch {
+		case errors.Is(err, entity.ErrUserIdentityDoesNotExist):
+			return nil, status.Error(codes.NotFound, err.Error())
+		}
 		return nil, err
 	}
 	resp := pb.GetUserIdByExternalIdentityResponse{
@@ -53,7 +69,7 @@ func (s *grpcServer) GetUserIdByExternalIdentity(
 	return &resp, nil
 }
 
-func newGrpcServer(userIdentityUc *useridentuc.UserIdentityUsecase) pb.WishlistServer {
+func newGrpcServer(userIdentityUc *useridentuc.UserIdentityUsecase) pb.WishlistServiceServer {
 	return &grpcServer{
 		userIdentityUc: userIdentityUc,
 	}
@@ -70,7 +86,7 @@ func StartGrpcServer(userIdentityUc *useridentuc.UserIdentityUsecase) error {
 	}
 	s := grpc.NewServer()
 	srv := newGrpcServer(userIdentityUc)
-	pb.RegisterWishlistServer(s, srv)
+	pb.RegisterWishlistServiceServer(s, srv)
 	err = s.Serve(lis)
 	if err != nil {
 		panic(err)

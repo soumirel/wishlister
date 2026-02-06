@@ -18,11 +18,11 @@ import (
 )
 
 func Run() {
-	migrationsBytes, err := os.ReadFile("./db/init/init.sql")
+	migrationsBytes, err := os.ReadFile("./init.sql")
 	if err != nil {
 		log.Fatal("open migrations file failed:", err.Error())
 	}
-	refreshScriptBytes, err := os.ReadFile("./db/refresh_test_data.sql")
+	refreshScriptBytes, err := os.ReadFile("./refresh_test_data.sql")
 	if err != nil {
 		log.Fatal("open migrations file failed:", err.Error())
 	}
