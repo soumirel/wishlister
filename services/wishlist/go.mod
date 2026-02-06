@@ -3,13 +3,13 @@ module github.com/soumirel/wishlister/services/wishlist
 go 1.25.1
 
 require (
-
 	github.com/georgysavva/scany/v2 v2.1.4
-	github.com/soumirel/wishlister/api/proto/gen/go/wishlist v0.0.0-20260206210639-2b1d2f57e8d0
 	github.com/gin-gonic/gin v1.11.0
 	github.com/gofrs/uuid/v5 v5.4.0
 	github.com/jackc/pgx/v5 v5.7.6
+	github.com/soumirel/wishlister/api/proto/gen/go/wishlist v0.0.0-20260206221255-1b0f45ad24b8
 	github.com/stretchr/testify v1.11.1
+	google.golang.org/grpc v1.78.0
 )
 
 require (
@@ -42,13 +42,14 @@ require (
 	github.com/ugorji/go/codec v1.3.0 // indirect
 	go.uber.org/mock v0.5.0 // indirect
 	golang.org/x/arch v0.20.0 // indirect
-	golang.org/x/crypto v0.44.0 // indirect
-	golang.org/x/mod v0.29.0 // indirect
-	golang.org/x/net v0.47.0 // indirect
-	golang.org/x/sync v0.18.0 // indirect
-	golang.org/x/sys v0.38.0 // indirect
-	golang.org/x/text v0.31.0 // indirect
-	golang.org/x/tools v0.38.0 // indirect
+	golang.org/x/crypto v0.47.0 // indirect
+	golang.org/x/mod v0.31.0 // indirect
+	golang.org/x/net v0.49.0 // indirect
+	golang.org/x/sync v0.19.0 // indirect
+	golang.org/x/sys v0.40.0 // indirect
+	golang.org/x/text v0.33.0 // indirect
+	golang.org/x/tools v0.40.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260203192932-546029d2fa20 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
