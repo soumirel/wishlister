@@ -7,9 +7,9 @@ import (
 	"os/signal"
 
 	"github.com/go-telegram/bot"
-	tgbotcontroller "github.com/soumirel/wishlister/telegram-bot/internal/controller/telegram_bot"
-	grpcrepo "github.com/soumirel/wishlister/telegram-bot/internal/repository/grpc"
-	"github.com/soumirel/wishlister/telegram-bot/internal/service"
+	tgbotcontroller "github.com/soumirel/wishlister/services/telegram-bot/internal/controller/telegram_bot"
+	grpcrepo "github.com/soumirel/wishlister/services/telegram-bot/internal/repository/grpc"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/service"
 )
 
 const (

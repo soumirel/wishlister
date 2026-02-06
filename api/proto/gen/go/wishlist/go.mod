@@ -1,4 +1,4 @@
-module github.com/soumirel/wishlister/api/proto/wishlist
+module github.com/soumirel/wishlister/api/proto/gen/go/wishlist
 
 go 1.25.1
 
@@ -8,8 +8,8 @@ require (
 )
 
 require (
-	golang.org/x/net v0.47.0 // indirect
-	golang.org/x/sys v0.38.0 // indirect
-	golang.org/x/text v0.31.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20251029180050-ab9386a59fda // indirect
+	golang.org/x/net v0.49.0 // indirect
+	golang.org/x/sys v0.40.0 // indirect
+	golang.org/x/text v0.33.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260203192932-546029d2fa20 // indirect
 )

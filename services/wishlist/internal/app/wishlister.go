@@ -4,17 +4,17 @@ import (
 	"log"
 	"os"
 
-	httpController "github.com/soumirel/wishlister/wishlist/internal/controller/http"
+	httpController "github.com/soumirel/wishlister/services/wishlist/internal/controller/http"
 
-	grpcController "github.com/soumirel/wishlister/wishlist/internal/controller/grpc"
-	"github.com/soumirel/wishlister/wishlist/internal/repository"
-	"github.com/soumirel/wishlister/wishlist/internal/uof"
-	useruc "github.com/soumirel/wishlister/wishlist/internal/usecase/user"
-	useridentity "github.com/soumirel/wishlister/wishlist/internal/usecase/user_identity"
+	grpcController "github.com/soumirel/wishlister/services/wishlist/internal/controller/grpc"
+	"github.com/soumirel/wishlister/services/wishlist/internal/repository"
+	"github.com/soumirel/wishlister/services/wishlist/internal/uof"
+	useruc "github.com/soumirel/wishlister/services/wishlist/internal/usecase/user"
+	useridentity "github.com/soumirel/wishlister/services/wishlist/internal/usecase/user_identity"
 
-	wishuc "github.com/soumirel/wishlister/wishlist/internal/usecase/wish"
-	wishlistuc "github.com/soumirel/wishlister/wishlist/internal/usecase/wishlist"
-	wishlistpermuc "github.com/soumirel/wishlister/wishlist/internal/usecase/wishlist_permission"
+	wishuc "github.com/soumirel/wishlister/services/wishlist/internal/usecase/wish"
+	wishlistuc "github.com/soumirel/wishlister/services/wishlist/internal/usecase/wishlist"
+	wishlistpermuc "github.com/soumirel/wishlister/services/wishlist/internal/usecase/wishlist_permission"
 )
 
 func Run() {

@@ -3,8 +3,8 @@ package controller
 import (
 	"net/http"
 
-	"github.com/soumirel/wishlister/wishlist/internal/controller/http/v1/dto"
-	useruc "github.com/soumirel/wishlister/wishlist/internal/usecase/user"
+	"github.com/soumirel/wishlister/services/wishlist/internal/controller/http/v1/dto"
+	useruc "github.com/soumirel/wishlister/services/wishlist/internal/usecase/user"
 
 	"github.com/gin-gonic/gin"
 )

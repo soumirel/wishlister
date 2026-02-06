@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	"github.com/soumirel/wishlister/wishlist/internal/domain/entity"
-	"github.com/soumirel/wishlister/wishlist/internal/domain/repository"
+	"github.com/soumirel/wishlister/services/wishlist/internal/domain/entity"
+	"github.com/soumirel/wishlister/services/wishlist/internal/domain/repository"
 )
 
 type userIdentityService struct {

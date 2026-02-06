@@ -7,11 +7,12 @@
 package wishlist
 
 import (
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
+
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -417,7 +418,7 @@ const file_wishlist_proto_rawDesc = "" +
 	"\x0fWishlistService\x12z\n" +
 	"\x1bGetUserIdByExternalIdentity\x12,.wishlist.GetUserIdByExternalIdentityRequest\x1a-.wishlist.GetUserIdByExternalIdentityResponse\x12\x83\x01\n" +
 	"\x1eCreateUserFromExternalIdentity\x12/.wishlist.CreateUserFromExternalIdentityRequest\x1a0.wishlist.CreateUserFromExternalIdentityResponse\x12\\\n" +
-	"\fGetWishlists\x12,.wishlist.GetUserIdByExternalIdentityRequest\x1a\x1e.wishlist.GetWishlistsResponseB3Z1github.com/soumirel/wishlister/api/proto/wishlistb\x06proto3"
+	"\fGetWishlists\x12,.wishlist.GetUserIdByExternalIdentityRequest\x1a\x1e.wishlist.GetWishlistsResponseB3Z1github.com/soumirel/wishlister/api/proto/gen/go/wishlistb\x06proto3"
 
 var (
 	file_wishlist_proto_rawDescOnce sync.Once

@@ -5,8 +5,8 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/soumirel/wishlister/telegram-bot/internal/domain/entity"
-	"github.com/soumirel/wishlister/telegram-bot/internal/domain/repository"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/entity"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/repository"
 )
 
 const (

@@ -3,10 +3,10 @@ package wishlist_permission
 import (
 	"context"
 
-	"github.com/soumirel/wishlister/wishlist/internal/domain/repository"
-	svcentity "github.com/soumirel/wishlister/wishlist/internal/domain/service"
-	"github.com/soumirel/wishlister/wishlist/internal/service"
-	"github.com/soumirel/wishlister/wishlist/internal/usecase"
+	"github.com/soumirel/wishlister/services/wishlist/internal/domain/repository"
+	svcentity "github.com/soumirel/wishlister/services/wishlist/internal/domain/service"
+	"github.com/soumirel/wishlister/services/wishlist/internal/service"
+	"github.com/soumirel/wishlister/services/wishlist/internal/usecase"
 )
 
 type WishlistPermissionUsecase struct {

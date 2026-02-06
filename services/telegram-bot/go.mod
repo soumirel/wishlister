@@ -1,4 +1,4 @@
-module github.com/soumirel/wishlister/telegram-bot
+module github.com/soumirel/wishlister/services/telegram-bot
 
 go 1.25.1
 

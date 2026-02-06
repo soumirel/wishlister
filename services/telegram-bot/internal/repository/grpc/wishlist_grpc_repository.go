@@ -3,9 +3,9 @@ package app
 import (
 	"context"
 
-	pb "github.com/soumirel/wishlister/api/proto/wishlist"
-	"github.com/soumirel/wishlister/telegram-bot/internal/domain/entity"
-	"github.com/soumirel/wishlister/telegram-bot/internal/domain/repository"
+	pb "github.com/soumirel/wishlister/api/proto/gen/go/wishlist"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/entity"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/repository"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"

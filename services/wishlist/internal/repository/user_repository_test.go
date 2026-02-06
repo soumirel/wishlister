@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	entity "github.com/soumirel/wishlister/wishlist/internal/domain/entity"
+	entity "github.com/soumirel/wishlister/services/wishlist/internal/domain/entity"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

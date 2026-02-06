@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/soumirel/wishlister/wishlist/internal/domain/entity"
-	"github.com/soumirel/wishlister/wishlist/internal/domain/repository"
+	"github.com/soumirel/wishlister/services/wishlist/internal/domain/entity"
+	"github.com/soumirel/wishlister/services/wishlist/internal/domain/repository"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"

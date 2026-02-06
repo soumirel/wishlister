@@ -8,8 +8,8 @@ import (
 	"sync"
 	"sync/atomic"
 
-	domainRepo "github.com/soumirel/wishlister/wishlist/internal/domain/repository"
-	"github.com/soumirel/wishlister/wishlist/internal/repository"
+	domainRepo "github.com/soumirel/wishlister/services/wishlist/internal/domain/repository"
+	"github.com/soumirel/wishlister/services/wishlist/internal/repository"
 )
 
 type UnitOfWork interface {

@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"github.com/soumirel/wishlister/telegram-bot/internal/domain/entity"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/entity"
 )
 
 type GetWishlistsParams struct {

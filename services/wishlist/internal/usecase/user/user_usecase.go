@@ -3,11 +3,11 @@ package user
 import (
 	"context"
 
-	"github.com/soumirel/wishlister/wishlist/internal/domain/entity"
-	"github.com/soumirel/wishlister/wishlist/internal/domain/repository"
-	svcentity "github.com/soumirel/wishlister/wishlist/internal/domain/service"
-	"github.com/soumirel/wishlister/wishlist/internal/service"
-	"github.com/soumirel/wishlister/wishlist/internal/usecase"
+	"github.com/soumirel/wishlister/services/wishlist/internal/domain/entity"
+	"github.com/soumirel/wishlister/services/wishlist/internal/domain/repository"
+	svcentity "github.com/soumirel/wishlister/services/wishlist/internal/domain/service"
+	"github.com/soumirel/wishlister/services/wishlist/internal/service"
+	"github.com/soumirel/wishlister/services/wishlist/internal/usecase"
 )
 
 type UserUsecase struct {

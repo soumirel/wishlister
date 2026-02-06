@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	entity "github.com/soumirel/wishlister/wishlist/internal/domain/entity"
+	entity "github.com/soumirel/wishlister/services/wishlist/internal/domain/entity"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -278,9 +278,9 @@ func TestWishRepository_UpdateWish(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			originalWish := tt.setup(t)
 			wish := &entity.Wish{
-				ID:         originalWish.ID,
-				WishlistID: originalWish.WishlistID,
-				Name:       originalWish.Name,
+				ID:          originalWish.ID,
+				WishlistID:  originalWish.WishlistID,
+				Name:        originalWish.Name,
 				Reservation: originalWish.Reservation,
 			}
 

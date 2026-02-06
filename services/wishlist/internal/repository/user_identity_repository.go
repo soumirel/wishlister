@@ -5,7 +5,7 @@ import (
 	"errors"
 
 	"github.com/jackc/pgx/v5"
-	entity "github.com/soumirel/wishlister/wishlist/internal/domain/entity"
+	entity "github.com/soumirel/wishlister/services/wishlist/internal/domain/entity"
 )
 
 type userIdentityRepository struct {

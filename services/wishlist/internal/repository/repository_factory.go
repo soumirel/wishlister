@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/soumirel/wishlister/wishlist/internal/domain/repository"
+	"github.com/soumirel/wishlister/services/wishlist/internal/domain/repository"
 )
 
 type repoFactory struct {

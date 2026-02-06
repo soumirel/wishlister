@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	entity "github.com/soumirel/wishlister/wishlist/internal/domain/entity"
+	entity "github.com/soumirel/wishlister/services/wishlist/internal/domain/entity"
 )
 
 type WishRepository interface {

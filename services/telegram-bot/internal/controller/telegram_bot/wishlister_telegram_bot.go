@@ -8,8 +8,8 @@ import (
 
 	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
-	"github.com/soumirel/wishlister/telegram-bot/internal/domain/entity"
-	"github.com/soumirel/wishlister/telegram-bot/internal/domain/service"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/entity"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/service"
 )
 
 const (

@@ -1,9 +1,11 @@
-module github.com/soumirel/wishlister/wishlist
+module github.com/soumirel/wishlister/services/wishlist
 
 go 1.25.1
 
 require (
+
 	github.com/georgysavva/scany/v2 v2.1.4
+	github.com/soumirel/wishlister/api/proto/gen/go/wishlist v0.0.0-20260206210639-2b1d2f57e8d0
 	github.com/gin-gonic/gin v1.11.0
 	github.com/gofrs/uuid/v5 v5.4.0
 	github.com/jackc/pgx/v5 v5.7.6

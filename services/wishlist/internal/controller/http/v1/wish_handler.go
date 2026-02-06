@@ -3,9 +3,9 @@ package controller
 import (
 	"net/http"
 
-	"github.com/soumirel/wishlister/wishlist/internal/auth"
-	"github.com/soumirel/wishlister/wishlist/internal/controller/http/v1/dto"
-	wishuc "github.com/soumirel/wishlister/wishlist/internal/usecase/wish"
+	"github.com/soumirel/wishlister/services/wishlist/internal/auth"
+	"github.com/soumirel/wishlister/services/wishlist/internal/controller/http/v1/dto"
+	wishuc "github.com/soumirel/wishlister/services/wishlist/internal/usecase/wish"
 
 	"github.com/gin-gonic/gin"
 )

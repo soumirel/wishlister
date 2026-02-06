@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"github.com/soumirel/wishlister/wishlist/internal/domain/entity"
+	"github.com/soumirel/wishlister/services/wishlist/internal/domain/entity"
 )
 
 type UserIdentityService interface {

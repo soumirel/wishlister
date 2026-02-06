@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"net"
 
-	pb "github.com/soumirel/wishlister/api/proto/wishlist"
-	"github.com/soumirel/wishlister/wishlist/internal/domain/entity"
-	useridentuc "github.com/soumirel/wishlister/wishlist/internal/usecase/user_identity"
+	pb "github.com/soumirel/wishlister/api/proto/gen/go/wishlist"
+	"github.com/soumirel/wishlister/services/wishlist/internal/domain/entity"
+	useridentuc "github.com/soumirel/wishlister/services/wishlist/internal/usecase/user_identity"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

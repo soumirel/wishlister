@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/soumirel/wishlister/wishlist/pkg/postgres"
+	"github.com/soumirel/wishlister/services/wishlist/pkg/postgres"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"

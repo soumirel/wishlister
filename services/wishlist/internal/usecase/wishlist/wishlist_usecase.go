@@ -3,10 +3,10 @@ package wishlist
 import (
 	"context"
 
-	"github.com/soumirel/wishlister/wishlist/internal/domain/entity"
-	"github.com/soumirel/wishlister/wishlist/internal/domain/repository"
-	"github.com/soumirel/wishlister/wishlist/internal/service"
-	"github.com/soumirel/wishlister/wishlist/internal/usecase"
+	"github.com/soumirel/wishlister/services/wishlist/internal/domain/entity"
+	"github.com/soumirel/wishlister/services/wishlist/internal/domain/repository"
+	"github.com/soumirel/wishlister/services/wishlist/internal/service"
+	"github.com/soumirel/wishlister/services/wishlist/internal/usecase"
 )
 
 type WishlistUsecase struct {

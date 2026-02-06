@@ -1,6 +1,6 @@
 package uof
 
-import "github.com/soumirel/wishlister/wishlist/internal/repository"
+import "github.com/soumirel/wishlister/services/wishlist/internal/repository"
 
 type uofFactory struct {
 	connFactory repository.ConnFactory

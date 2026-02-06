@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/soumirel/wishlister/wishlist/internal/auth"
+	"github.com/soumirel/wishlister/services/wishlist/internal/auth"
 
 	"github.com/gin-gonic/gin"
 )
