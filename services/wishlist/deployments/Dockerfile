@@ -15,6 +15,11 @@ WORKDIR /app
 
 COPY --from=builder --chown=app:app /app/wishlister /app/wishlister
 
+COPY --from=builder --chown=app:app /src/db/init/init.sql /app/scripts/
+COPY --from=builder --chown=app:app /src/db/refresh_test_data.sql /app/scripts/
+
+COPY --from=builder --chown=app:app /src/deployments/config.compose.yaml /app/config.yaml
+
 USER 1001
 
 # http
@@ -22,4 +27,4 @@ EXPOSE 8080
 # grpc
 EXPOSE 8081
 
-CMD ["/app/main"]
+CMD ["/app/wishlister"]

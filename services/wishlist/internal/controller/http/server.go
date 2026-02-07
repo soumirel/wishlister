@@ -14,11 +14,8 @@ import (
 	"github.com/gin-gonic/gin/render"
 )
 
-const (
-	serverAddr = ":8080"
-)
-
 func StartHttpServer(
+	httpAddr string,
 	userUc *useruc.UserUsecase,
 	wishlistUc *wishlistuc.WishlistUsecase,
 	wishUc *wishuc.WishUsecase,
@@ -39,7 +36,7 @@ func StartHttpServer(
 	}
 
 	go func() {
-		err := e.Run(serverAddr)
+		err := e.Run(httpAddr)
 		if err != nil {
 			panic(err)
 		}

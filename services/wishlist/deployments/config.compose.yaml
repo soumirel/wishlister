@@ -1,0 +1,13 @@
+server:
+  http_addr: ":8080"
+  grpc_addr: ":8081"
+
+db:
+  host: wishlister-postgres
+  port: "5432"
+  database: wishlister
+  user: wishlister
+
+paths:
+  migrations: "./scripts/init.sql"
+  refresh_data: "./scripts/refresh_test_data.sql"

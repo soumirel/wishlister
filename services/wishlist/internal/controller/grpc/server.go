@@ -3,7 +3,6 @@ package grpc
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net"
 
 	pb "github.com/soumirel/wishlister/api/proto/gen/go/wishlist"
@@ -75,12 +74,8 @@ func newGrpcServer(userIdentityUc *useridentuc.UserIdentityUsecase) pb.WishlistS
 	}
 }
 
-const (
-	grpcPort = "8081"
-)
-
-func StartGrpcServer(userIdentityUc *useridentuc.UserIdentityUsecase) error {
-	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%s", grpcPort))
+func StartGrpcServer(grpcAddr string, userIdentityUc *useridentuc.UserIdentityUsecase) error {
+	lis, err := net.Listen("tcp", grpcAddr)
 	if err != nil {
 		return err
 	}

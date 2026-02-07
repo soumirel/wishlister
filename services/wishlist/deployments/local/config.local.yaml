@@ -1,0 +1,13 @@
+server:
+  http_addr: ":8080"
+  grpc_addr: ":8081"
+
+db:
+  host: localhost
+  port: "5432"
+  database: wishlister
+  user: wishlister
+
+paths:
+  migrations: "./db/init/init.sql"
+  refresh_data: "./db/refresh_test_data.sql"

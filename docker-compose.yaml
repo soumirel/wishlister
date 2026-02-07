@@ -1,7 +1,8 @@
+
 services:
   postgres:
     image: postgres:18-alpine
-    container_name: postgres-wishlister
+    container_name: wishlister-postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: wishlister
@@ -18,14 +19,17 @@ services:
       retries: 5
     networks:
       - wishlister-network
-  wishlister-core:
+  core:
     build:
       context: ./services/wishlist/
       dockerfile: ./deployments/Dockerfile
     container_name: wishlister-core
     restart: unless-stopped
+    env_file:
+      - ./services/wishlist/deployments/.compose.env
     ports:
-      - "127.0.0.1:5432:5432"
+      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:8081:8081"
     depends_on:
       postgres:
         condition: service_healthy
@@ -37,10 +41,6 @@ services:
       start_period: 40s
     networks:
       - wishlister-network
-    volumes:
-      - ./db/init/init.sql:/app/init.sql:ro
-      - ./db/refresh_test_data.sql:/refresh_test_data.sql:ro
-
 
 volumes:
   postgres-data:

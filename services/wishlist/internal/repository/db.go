@@ -35,12 +35,12 @@ func (c *postgresClient) GetConn(ctx context.Context) (Conn, error) {
 	}, nil
 }
 
-func InitPostgresClient(migrationsScript string, refreshScript string) *postgresClient {
+func InitPostgresClient(dbCfg postgres.DbConfig, migrationsScript string, refreshScript string) *postgresClient {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	pgClient, err := connect(ctx)
+	pgClient, err := postgres.NewClient(ctx, dbCfg)
 	if err != nil {
-		log.Fatal("connection to db failed")
+		log.Fatal("connection to db failed:", err)
 	}
 	err = pgClient.Ping(ctx)
 	if err != nil {
@@ -57,20 +57,6 @@ func InitPostgresClient(migrationsScript string, refreshScript string) *postgres
 	return &postgresClient{
 		pgClient,
 	}
-}
-
-func connect(ctx context.Context) (*postgres.Client, error) {
-	postgresClient, err := postgres.NewClient(ctx, postgres.DbConfig{
-		Host:     "localhost",
-		Port:     "5432",
-		Password: "wishlister",
-		User:     "wishlister",
-		Database: "wishlister",
-	})
-	if err != nil {
-		return nil, err
-	}
-	return postgresClient, nil
 }
 
 func execScript(ctx context.Context, querier Querier, migrationsScript string) error {
