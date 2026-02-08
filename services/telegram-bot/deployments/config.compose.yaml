@@ -1,0 +1,5 @@
+services:
+  wishlist_grpc_addr: "core:8081"
+
+server:
+  http_addr: ":8080"

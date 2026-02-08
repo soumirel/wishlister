@@ -80,5 +80,3 @@ func (r *wishlistGRPC) CreateUserFromExternalIdentity(ctx context.Context, ei re
 	userID := resp.GetUserID()
 	return userID, nil
 }
-
-func (r *wishlistGRPC) GetWishlists(ctx context.Context)

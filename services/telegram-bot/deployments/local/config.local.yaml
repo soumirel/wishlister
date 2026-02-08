@@ -1,0 +1,5 @@
+services:
+  wishlist_grpc_addr: "localhost:500001"
+
+server:
+  http_addr: ":50010"

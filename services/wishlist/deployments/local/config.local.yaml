@@ -1,6 +1,6 @@
 server:
-  http_addr: ":8080"
-  grpc_addr: ":8081"
+  http_addr: ":50000"
+  grpc_addr: ":50001"
 
 db:
   host: localhost
