@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/go-telegram/bot"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/config"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/controller/http"
 	tgbotcontroller "github.com/soumirel/wishlister/services/telegram-bot/internal/controller/telegram_bot"
@@ -28,21 +27,13 @@ func Run() {
 	}
 	wishlisterAuthSvc := service.NewWishlisterAuthSvc(wishlisterGRPC)
 
-	botHandler := tgbotcontroller.NewBotHandler(wishlisterAuthSvc)
-
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
 
-	opts := []bot.Option{
-		bot.WithDefaultHandler(botHandler.Handle),
-	}
-
-	b, err := bot.New(cfg.TelegramBotConfig.Token, opts...)
+	err = tgbotcontroller.StartTelegramBot(ctx, cfg.TelegramBot.Token, wishlisterAuthSvc)
 	if err != nil {
 		panic(err)
 	}
-
-	go b.Start(ctx)
 
 	select {}
 }

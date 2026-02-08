@@ -6,8 +6,11 @@ import (
 	"net"
 
 	pb "github.com/soumirel/wishlister/api/proto/gen/go/wishlist"
+	"github.com/soumirel/wishlister/services/wishlist/internal/auth"
+	"github.com/soumirel/wishlister/services/wishlist/internal/controller/grpc/interceptors"
 	"github.com/soumirel/wishlister/services/wishlist/internal/domain/entity"
 	useridentuc "github.com/soumirel/wishlister/services/wishlist/internal/usecase/user_identity"
+	wishlistuc "github.com/soumirel/wishlister/services/wishlist/internal/usecase/wishlist"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -17,6 +20,41 @@ type grpcServer struct {
 	pb.UnimplementedWishlistServiceServer
 
 	userIdentityUc *useridentuc.UserIdentityUsecase
+	wishlistUc     *wishlistuc.WishlistUsecase
+}
+
+func newGrpcServer(
+	userIdentityUc *useridentuc.UserIdentityUsecase,
+	wishlistUc *wishlistuc.WishlistUsecase,
+) pb.WishlistServiceServer {
+	return &grpcServer{
+		userIdentityUc: userIdentityUc,
+		wishlistUc:     wishlistUc,
+	}
+}
+
+func StartGrpcServer(
+	grpcAddr string,
+	userIdentityUc *useridentuc.UserIdentityUsecase,
+	wishlistUc *wishlistuc.WishlistUsecase,
+) error {
+	lis, err := net.Listen("tcp", grpcAddr)
+	if err != nil {
+		return err
+	}
+	opts := []grpc.ServerOption{
+		grpc.ChainUnaryInterceptor(interceptors.AuthUnaryInterceptor),
+	}
+	s := grpc.NewServer(opts...)
+	srv := newGrpcServer(
+		userIdentityUc, wishlistUc,
+	)
+	pb.RegisterWishlistServiceServer(s, srv)
+	err = s.Serve(lis)
+	if err != nil {
+		panic(err)
+	}
+	return nil
 }
 
 func (s *grpcServer) CreateUserFromExternalIdentity(
@@ -42,7 +80,28 @@ func (s *grpcServer) GetWishlists(
 ) (
 	*pb.GetWishlistsResponse, error,
 ) {
-	return nil, status.Error(codes.Unimplemented, "method GetWishlists not implemented")
+	au, ok := auth.FromCtx(ctx)
+	if !ok {
+		return nil, auth.ErrUnauthorized
+	}
+	cmd := wishlistuc.GetWishlistsCommand{
+		au.UserID,
+	}
+	wishlists, err := s.wishlistUc.GetWishlists(ctx, cmd)
+	if err != nil {
+		return nil, err
+	}
+	resp := pb.GetWishlistsResponse{
+		Wishlists: make([]*pb.Wishlist, len(wishlists)),
+	}
+	for i, w := range wishlists {
+		resp.Wishlists[i] = &pb.Wishlist{
+			ID:     w.ID,
+			UserID: w.UserID,
+			Name:   w.Name,
+		}
+	}
+	return &resp, nil
 }
 
 func (s *grpcServer) GetUserIdByExternalIdentity(
@@ -66,25 +125,4 @@ func (s *grpcServer) GetUserIdByExternalIdentity(
 		UserID: userID,
 	}
 	return &resp, nil
-}
-
-func newGrpcServer(userIdentityUc *useridentuc.UserIdentityUsecase) pb.WishlistServiceServer {
-	return &grpcServer{
-		userIdentityUc: userIdentityUc,
-	}
-}
-
-func StartGrpcServer(grpcAddr string, userIdentityUc *useridentuc.UserIdentityUsecase) error {
-	lis, err := net.Listen("tcp", grpcAddr)
-	if err != nil {
-		return err
-	}
-	s := grpc.NewServer()
-	srv := newGrpcServer(userIdentityUc)
-	pb.RegisterWishlistServiceServer(s, srv)
-	err = s.Serve(lis)
-	if err != nil {
-		panic(err)
-	}
-	return nil
 }

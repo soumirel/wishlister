@@ -6,6 +6,7 @@ import (
 	pb "github.com/soumirel/wishlister/api/proto/gen/go/wishlist"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/entity"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/repository"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/repository/grpc/interceptors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
@@ -31,6 +32,9 @@ func NewWishlistGrpcRepository(addr string) (*wishlistGRPC, error) {
 		),
 		grpc.WithTransportCredentials(
 			insecure.NewCredentials(),
+		),
+		grpc.WithChainUnaryInterceptor(
+			interceptors.AuthUnaryInterceptor,
 		),
 	)
 

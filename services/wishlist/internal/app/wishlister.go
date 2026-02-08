@@ -4,9 +4,9 @@ import (
 	"log"
 	"os"
 
-	httpController "github.com/soumirel/wishlister/services/wishlist/internal/controller/http"
-	grpcController "github.com/soumirel/wishlister/services/wishlist/internal/controller/grpc"
 	"github.com/soumirel/wishlister/services/wishlist/internal/config"
+	grpcController "github.com/soumirel/wishlister/services/wishlist/internal/controller/grpc"
+	httpController "github.com/soumirel/wishlister/services/wishlist/internal/controller/http"
 	"github.com/soumirel/wishlister/services/wishlist/internal/repository"
 	"github.com/soumirel/wishlister/services/wishlist/internal/uof"
 	useruc "github.com/soumirel/wishlister/services/wishlist/internal/usecase/user"
@@ -46,7 +46,7 @@ func Run() {
 	userIdentityUc := useridentity.NewUserIdentityUsecase(uofFactory)
 
 	httpController.StartHttpServer(cfg.Server.HTTPAddr, userUc, wishlistUc, wishUc, wishlistPermissionUc)
-	grpcController.StartGrpcServer(cfg.Server.GRPCAddr, userIdentityUc)
+	grpcController.StartGrpcServer(cfg.Server.GRPCAddr, userIdentityUc, wishlistUc)
 
 	select {}
 }

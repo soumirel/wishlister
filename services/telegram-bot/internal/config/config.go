@@ -14,9 +14,9 @@ const (
 )
 
 type Config struct {
-	Server            Server      `mapstructure:"server"`
-	Services          Services    `mapstructure:"services"`
-	TelegramBotConfig TelegramBot `mapstructure:"telegram_bot"`
+	Server      Server      `mapstructure:"server"`
+	Services    Services    `mapstructure:"services"`
+	TelegramBot TelegramBot `mapstructure:"telegram_bot"`
 }
 
 type Server struct {
