@@ -10,11 +10,12 @@ import (
 func StartTelegramBot(
 	appCtx context.Context,
 	botToken string,
-	authSvc service.WishlisterAuthService,
+	authSvc service.WishlistAuthService,
+	wishlistReadSvc service.WishlistCoreReadService,
 ) error {
 	mwFactory := newMiddlewareFactory(authSvc)
 
-	botHandler := NewBotHandler()
+	botHandler := NewBotHandler(wishlistReadSvc)
 
 	opts := []bot.Option{
 		bot.WithDefaultHandler(botHandler.Handle),
@@ -27,6 +28,11 @@ func StartTelegramBot(
 	if err != nil {
 		return err
 	}
+
+	b.RegisterHandler(
+		bot.HandlerTypeMessageText, "wishlists",
+		bot.MatchTypeCommandStartOnly, botHandler.HandleListCommand,
+	)
 
 	go b.Start(appCtx)
 

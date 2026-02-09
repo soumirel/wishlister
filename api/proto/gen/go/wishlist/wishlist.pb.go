@@ -413,11 +413,11 @@ const file_wishlist_proto_rawDesc = "" +
 	"\x06UserID\x18\x01 \x01(\tR\x06UserID\"\x15\n" +
 	"\x13GetWishlistsRequest\"H\n" +
 	"\x14GetWishlistsResponse\x120\n" +
-	"\tWishlists\x18\x01 \x03(\v2\x12.wishlist.WishlistR\tWishlists2\xf1\x02\n" +
+	"\tWishlists\x18\x01 \x03(\v2\x12.wishlist.WishlistR\tWishlists2\xe2\x02\n" +
 	"\x0fWishlistService\x12z\n" +
 	"\x1bGetUserIdByExternalIdentity\x12,.wishlist.GetUserIdByExternalIdentityRequest\x1a-.wishlist.GetUserIdByExternalIdentityResponse\x12\x83\x01\n" +
-	"\x1eCreateUserFromExternalIdentity\x12/.wishlist.CreateUserFromExternalIdentityRequest\x1a0.wishlist.CreateUserFromExternalIdentityResponse\x12\\\n" +
-	"\fGetWishlists\x12,.wishlist.GetUserIdByExternalIdentityRequest\x1a\x1e.wishlist.GetWishlistsResponseB:Z8github.com/soumirel/wishlister/api/proto/gen/go/wishlistb\x06proto3"
+	"\x1eCreateUserFromExternalIdentity\x12/.wishlist.CreateUserFromExternalIdentityRequest\x1a0.wishlist.CreateUserFromExternalIdentityResponse\x12M\n" +
+	"\fGetWishlists\x12\x1d.wishlist.GetWishlistsRequest\x1a\x1e.wishlist.GetWishlistsResponseB:Z8github.com/soumirel/wishlister/api/proto/gen/go/wishlistb\x06proto3"
 
 var (
 	file_wishlist_proto_rawDescOnce sync.Once
@@ -448,7 +448,7 @@ var file_wishlist_proto_depIdxs = []int32{
 	0, // 2: wishlist.GetWishlistsResponse.Wishlists:type_name -> wishlist.Wishlist
 	2, // 3: wishlist.WishlistService.GetUserIdByExternalIdentity:input_type -> wishlist.GetUserIdByExternalIdentityRequest
 	4, // 4: wishlist.WishlistService.CreateUserFromExternalIdentity:input_type -> wishlist.CreateUserFromExternalIdentityRequest
-	2, // 5: wishlist.WishlistService.GetWishlists:input_type -> wishlist.GetUserIdByExternalIdentityRequest
+	6, // 5: wishlist.WishlistService.GetWishlists:input_type -> wishlist.GetWishlistsRequest
 	3, // 6: wishlist.WishlistService.GetUserIdByExternalIdentity:output_type -> wishlist.GetUserIdByExternalIdentityResponse
 	5, // 7: wishlist.WishlistService.CreateUserFromExternalIdentity:output_type -> wishlist.CreateUserFromExternalIdentityResponse
 	7, // 8: wishlist.WishlistService.GetWishlists:output_type -> wishlist.GetWishlistsResponse

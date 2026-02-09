@@ -30,7 +30,7 @@ const (
 type WishlistServiceClient interface {
 	GetUserIdByExternalIdentity(ctx context.Context, in *GetUserIdByExternalIdentityRequest, opts ...grpc.CallOption) (*GetUserIdByExternalIdentityResponse, error)
 	CreateUserFromExternalIdentity(ctx context.Context, in *CreateUserFromExternalIdentityRequest, opts ...grpc.CallOption) (*CreateUserFromExternalIdentityResponse, error)
-	GetWishlists(ctx context.Context, in *GetUserIdByExternalIdentityRequest, opts ...grpc.CallOption) (*GetWishlistsResponse, error)
+	GetWishlists(ctx context.Context, in *GetWishlistsRequest, opts ...grpc.CallOption) (*GetWishlistsResponse, error)
 }
 
 type wishlistServiceClient struct {
@@ -61,7 +61,7 @@ func (c *wishlistServiceClient) CreateUserFromExternalIdentity(ctx context.Conte
 	return out, nil
 }
 
-func (c *wishlistServiceClient) GetWishlists(ctx context.Context, in *GetUserIdByExternalIdentityRequest, opts ...grpc.CallOption) (*GetWishlistsResponse, error) {
+func (c *wishlistServiceClient) GetWishlists(ctx context.Context, in *GetWishlistsRequest, opts ...grpc.CallOption) (*GetWishlistsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetWishlistsResponse)
 	err := c.cc.Invoke(ctx, WishlistService_GetWishlists_FullMethodName, in, out, cOpts...)
@@ -77,7 +77,7 @@ func (c *wishlistServiceClient) GetWishlists(ctx context.Context, in *GetUserIdB
 type WishlistServiceServer interface {
 	GetUserIdByExternalIdentity(context.Context, *GetUserIdByExternalIdentityRequest) (*GetUserIdByExternalIdentityResponse, error)
 	CreateUserFromExternalIdentity(context.Context, *CreateUserFromExternalIdentityRequest) (*CreateUserFromExternalIdentityResponse, error)
-	GetWishlists(context.Context, *GetUserIdByExternalIdentityRequest) (*GetWishlistsResponse, error)
+	GetWishlists(context.Context, *GetWishlistsRequest) (*GetWishlistsResponse, error)
 	mustEmbedUnimplementedWishlistServiceServer()
 }
 
@@ -94,7 +94,7 @@ func (UnimplementedWishlistServiceServer) GetUserIdByExternalIdentity(context.Co
 func (UnimplementedWishlistServiceServer) CreateUserFromExternalIdentity(context.Context, *CreateUserFromExternalIdentityRequest) (*CreateUserFromExternalIdentityResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateUserFromExternalIdentity not implemented")
 }
-func (UnimplementedWishlistServiceServer) GetWishlists(context.Context, *GetUserIdByExternalIdentityRequest) (*GetWishlistsResponse, error) {
+func (UnimplementedWishlistServiceServer) GetWishlists(context.Context, *GetWishlistsRequest) (*GetWishlistsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetWishlists not implemented")
 }
 func (UnimplementedWishlistServiceServer) mustEmbedUnimplementedWishlistServiceServer() {}
@@ -155,7 +155,7 @@ func _WishlistService_CreateUserFromExternalIdentity_Handler(srv interface{}, ct
 }
 
 func _WishlistService_GetWishlists_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserIdByExternalIdentityRequest)
+	in := new(GetWishlistsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -167,7 +167,7 @@ func _WishlistService_GetWishlists_Handler(srv interface{}, ctx context.Context,
 		FullMethod: WishlistService_GetWishlists_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WishlistServiceServer).GetWishlists(ctx, req.(*GetUserIdByExternalIdentityRequest))
+		return srv.(WishlistServiceServer).GetWishlists(ctx, req.(*GetWishlistsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

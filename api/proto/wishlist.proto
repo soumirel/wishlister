@@ -48,5 +48,5 @@ service WishlistService {
     rpc CreateUserFromExternalIdentity(CreateUserFromExternalIdentityRequest) returns (CreateUserFromExternalIdentityResponse);
 
     //
-    rpc GetWishlists(GetUserIdByExternalIdentityRequest) returns (GetWishlistsResponse);
+    rpc GetWishlists(GetWishlistsRequest) returns (GetWishlistsResponse);
 }

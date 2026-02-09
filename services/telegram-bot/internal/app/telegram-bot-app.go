@@ -25,12 +25,17 @@ func Run() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	wishlisterAuthSvc := service.NewWishlisterAuthSvc(wishlisterGRPC)
+	wishlistReadSvc := service.NewWishlisterReadSvc(wishlisterGRPC)
 
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
 
-	err = tgbotcontroller.StartTelegramBot(ctx, cfg.TelegramBot.Token, wishlisterAuthSvc)
+	err = tgbotcontroller.StartTelegramBot(
+		ctx, cfg.TelegramBot.Token,
+		wishlisterAuthSvc, wishlistReadSvc,
+	)
 	if err != nil {
 		panic(err)
 	}

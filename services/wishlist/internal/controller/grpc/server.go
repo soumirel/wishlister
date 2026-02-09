@@ -76,7 +76,7 @@ func (s *grpcServer) CreateUserFromExternalIdentity(
 }
 
 func (s *grpcServer) GetWishlists(
-	ctx context.Context, req *pb.GetUserIdByExternalIdentityRequest,
+	ctx context.Context, req *pb.GetWishlistsRequest,
 ) (
 	*pb.GetWishlistsResponse, error,
 ) {
@@ -85,7 +85,7 @@ func (s *grpcServer) GetWishlists(
 		return nil, auth.ErrUnauthorized
 	}
 	cmd := wishlistuc.GetWishlistsCommand{
-		au.UserID,
+		RequestorUserID: au.UserID,
 	}
 	wishlists, err := s.wishlistUc.GetWishlists(ctx, cmd)
 	if err != nil {

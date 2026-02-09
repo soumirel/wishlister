@@ -84,3 +84,21 @@ func (r *wishlistGRPC) CreateUserFromExternalIdentity(ctx context.Context, ei re
 	userID := resp.GetUserID()
 	return userID, nil
 }
+
+func (r *wishlistGRPC) GetWishlists(ctx context.Context) (entity.WishlistListModel, error) {
+	req := pb.GetWishlistsRequest{}
+	resp, err := r.stub.GetWishlists(ctx, &req)
+	if err != nil {
+		return nil, err
+	}
+	wishlistsResp := resp.GetWishlists()
+	list := make(entity.WishlistListModel, len(wishlistsResp))
+	for i, v := range wishlistsResp {
+		list[i] = &entity.WishlistListItemModel{
+			ID:     v.ID,
+			UserID: v.UserID,
+			Name:   v.Name,
+		}
+	}
+	return list, nil
+}

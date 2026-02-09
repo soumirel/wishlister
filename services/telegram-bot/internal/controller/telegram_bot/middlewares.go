@@ -14,10 +14,10 @@ import (
 )
 
 type middlewareFactory struct {
-	authSvc service.WishlisterAuthService
+	authSvc service.WishlistAuthService
 }
 
-func newMiddlewareFactory(authSvc service.WishlisterAuthService) *middlewareFactory {
+func newMiddlewareFactory(authSvc service.WishlistAuthService) *middlewareFactory {
 	return &middlewareFactory{
 		authSvc: authSvc,
 	}

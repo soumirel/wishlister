@@ -10,6 +10,6 @@ type GetWishlistsParams struct {
 	RequestorUserID string
 }
 
-type WishlisterReadService interface {
-	GetWishlists(ctx context.Context) ([]*entity.Wishlist, error)
+type WishlistCoreReadService interface {
+	GetWishlists(ctx context.Context) (entity.WishlistListModel, error)
 }

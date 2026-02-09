@@ -8,15 +8,15 @@ import (
 )
 
 type wishlisterReadSvc struct {
-	readRepo repository.WishlisterReadRepository
+	readRepo repository.WishlistCoreReadRepository
 }
 
-func NewWishlisterReadSvc(readRepo repository.WishlisterReadRepository) *wishlisterReadSvc {
+func NewWishlisterReadSvc(readRepo repository.WishlistCoreReadRepository) *wishlisterReadSvc {
 	return &wishlisterReadSvc{
 		readRepo: readRepo,
 	}
 }
 
-func (s *wishlisterReadSvc) GetWishlists(ctx context.Context) ([]*entity.Wishlist, error) {
+func (s *wishlisterReadSvc) GetWishlists(ctx context.Context) (entity.WishlistListModel, error) {
 	return s.readRepo.GetWishlists(ctx)
 }

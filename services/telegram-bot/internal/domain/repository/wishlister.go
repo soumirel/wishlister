@@ -16,6 +16,6 @@ type WishlistCoreAuthRepository interface {
 	CreateUserFromExternalIdentity(ctx context.Context, ei ExternalIdentity) (string, error)
 }
 
-type WishlisterReadRepository interface {
-	GetWishlists(ctx context.Context) ([]*entity.Wishlist, error)
+type WishlistCoreReadRepository interface {
+	GetWishlists(ctx context.Context) (entity.WishlistListModel, error)
 }
