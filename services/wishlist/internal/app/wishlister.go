@@ -26,15 +26,10 @@ func Run() {
 	if err != nil {
 		log.Fatal("open migrations file failed:", err.Error())
 	}
-	refreshScriptBytes, err := os.ReadFile(cfg.Paths.RefreshData)
-	if err != nil {
-		log.Fatal("open refresh data file failed:", err.Error())
-	}
 
 	postgresClient := repository.InitPostgresClient(
 		cfg.DbConfig(),
 		string(migrationsBytes),
-		string(refreshScriptBytes),
 	)
 
 	uofFactory := uof.NewUnitOfWorkFactory(postgresClient)
