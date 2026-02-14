@@ -24,7 +24,7 @@ func NewWishlisterAuthSvc(wishlisterAuthRepo repository.WishlistCoreAuthReposito
 }
 
 func (s *wishlisterAuthSvc) AuthByTelegramID(ctx context.Context, telegramID int64) (*model.WishlisterUser, error) {
-	ei := repository.ExternalIdentity{
+	ei := model.ExternalIdentity{
 		ExternalID:       strconv.FormatInt(telegramID, 10),
 		IdentityProvider: identityProvider,
 	}
@@ -38,7 +38,7 @@ func (s *wishlisterAuthSvc) AuthByTelegramID(ctx context.Context, telegramID int
 	return s.makeUserResult(userID, err)
 }
 
-func (s *wishlisterAuthSvc) createUserFromExternalIdentity(ctx context.Context, ei repository.ExternalIdentity) (string, error) {
+func (s *wishlisterAuthSvc) createUserFromExternalIdentity(ctx context.Context, ei model.ExternalIdentity) (string, error) {
 	userID, err := s.wishlisterAuthRepo.CreateUserFromExternalIdentity(ctx, ei)
 	if err != nil {
 		return "", err

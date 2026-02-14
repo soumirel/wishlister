@@ -1,4 +1,4 @@
-package telegrambot
+package handler
 
 import (
 	"context"
@@ -8,18 +8,24 @@ import (
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/ui"
 )
 
+const (
+	emptyPattern = ""
+)
+
 func StartTelegramBot(
 	appCtx context.Context,
 	botToken string,
 	authSvc service.WishlistAuthService,
 	intentDipatcher ui.IntentDispatcher,
+	viewStateSvc viewStateService,
 ) error {
 	mwFactory := newMiddlewareFactory(authSvc)
-
-	botHandler := NewBotHandler(intentDipatcher)
+	handlerFactory := NewHandlerFactory(intentDipatcher, viewStateSvc)
 
 	opts := []bot.Option{
-		bot.WithDefaultHandler(botHandler.Handle),
+		bot.WithDefaultHandler(
+			handlerFactory.getEchoHandleFunc(),
+		),
 		bot.WithMiddlewares(
 			mwFactory.AuthMiddleware(),
 		),
@@ -30,9 +36,18 @@ func StartTelegramBot(
 		return err
 	}
 
-	b.RegisterHandler(
-		bot.HandlerTypeMessageText, "wishlists",
-		bot.MatchTypeCommandStartOnly, botHandler.HandleListCommand,
+	handlerFactory.RegisterHandler(
+		b,
+		bot.HandlerTypeMessageText,
+		wishlistsCommand,
+		bot.MatchTypeCommandStartOnly,
+	)
+
+	handlerFactory.RegisterHandler(
+		b,
+		bot.HandlerTypeMessageText,
+		createWishlistCommand,
+		bot.MatchTypeCommandStartOnly,
 	)
 
 	go b.Start(appCtx)

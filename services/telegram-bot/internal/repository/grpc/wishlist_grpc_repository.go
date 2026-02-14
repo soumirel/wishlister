@@ -1,11 +1,10 @@
-package app
+package grpc
 
 import (
 	"context"
 
 	pb "github.com/soumirel/wishlister/api/proto/gen/go/wishlist"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/model"
-	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/repository"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/repository/grpc/interceptors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -14,8 +13,8 @@ import (
 )
 
 type WishlistRepository interface {
-	GetUserIdByExternalIdentity(ctx context.Context, ei repository.ExternalIdentity) (string, error)
-	CreateUserFromExternalIdentity(ctx context.Context, ei repository.ExternalIdentity) (string, error)
+	GetUserIdByExternalIdentity(ctx context.Context, ei model.ExternalIdentity) (string, error)
+	CreateUserFromExternalIdentity(ctx context.Context, ei model.ExternalIdentity) (string, error)
 }
 
 type wishlistGRPC struct {
@@ -50,7 +49,7 @@ func NewWishlistGrpcRepository(addr string) (*wishlistGRPC, error) {
 	return client, nil
 }
 
-func (r *wishlistGRPC) GetUserIdByExternalIdentity(ctx context.Context, ei repository.ExternalIdentity) (string, error) {
+func (r *wishlistGRPC) GetUserIdByExternalIdentity(ctx context.Context, ei model.ExternalIdentity) (string, error) {
 	req := pb.GetUserIdByExternalIdentityRequest{
 		ExternalIdentity: &pb.ExternalIdentity{
 			ExternalID:       ei.ExternalID,
@@ -70,7 +69,7 @@ func (r *wishlistGRPC) GetUserIdByExternalIdentity(ctx context.Context, ei repos
 	return userID, nil
 }
 
-func (r *wishlistGRPC) CreateUserFromExternalIdentity(ctx context.Context, ei repository.ExternalIdentity) (string, error) {
+func (r *wishlistGRPC) CreateUserFromExternalIdentity(ctx context.Context, ei model.ExternalIdentity) (string, error) {
 	req := pb.CreateUserFromExternalIdentityRequest{
 		ExternalIdentity: &pb.ExternalIdentity{
 			ExternalID:       ei.ExternalID,

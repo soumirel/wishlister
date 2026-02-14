@@ -23,7 +23,7 @@ func (d *intentDispatcher) DispatchViewIntent(ctx context.Context, i ui.Intent, 
 	if err != nil {
 		return err
 	}
-	vm, err := presenter.HandleIntent(ctx, i)
+	vm, err := presenter.HandleIntent(ctx, i, v.State())
 	if err != nil {
 		return err
 	}

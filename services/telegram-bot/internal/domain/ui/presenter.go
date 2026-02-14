@@ -12,7 +12,7 @@ const (
 )
 
 type Presenter interface {
-	HandleIntent(ctx context.Context, i Intent) (ViewModel, error)
+	HandleIntent(ctx context.Context, i Intent, st State) (ViewModel, error)
 	Module() ModuleType
 }
 

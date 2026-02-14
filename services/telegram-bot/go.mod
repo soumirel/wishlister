@@ -4,7 +4,9 @@ go 1.25.1
 
 require (
 	github.com/go-telegram/bot v1.18.0
+	github.com/soumirel/wishlister/api/proto/gen/go/wishlist v0.0.0-20260214095050-f81c3af373ca
 	github.com/spf13/viper v1.21.0
+	github.com/valkey-io/valkey-go v1.0.71
 	google.golang.org/grpc v1.78.0
 )
 
@@ -20,7 +22,7 @@ require (
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/net v0.49.0 // indirect
-	golang.org/x/sys v0.40.0 // indirect
+	golang.org/x/sys v0.41.0 // indirect
 	golang.org/x/text v0.33.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260203192932-546029d2fa20 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect

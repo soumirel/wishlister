@@ -6,14 +6,9 @@ import (
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/model"
 )
 
-type ExternalIdentity struct {
-	ExternalID       string
-	IdentityProvider string
-}
-
 type WishlistCoreAuthRepository interface {
-	GetUserIdByExternalIdentity(ctx context.Context, ei ExternalIdentity) (string, error)
-	CreateUserFromExternalIdentity(ctx context.Context, ei ExternalIdentity) (string, error)
+	GetUserIdByExternalIdentity(ctx context.Context, ei model.ExternalIdentity) (string, error)
+	CreateUserFromExternalIdentity(ctx context.Context, ei model.ExternalIdentity) (string, error)
 }
 
 type WishlistCoreReadRepository interface {

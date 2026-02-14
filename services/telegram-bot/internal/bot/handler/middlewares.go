@@ -1,4 +1,4 @@
-package telegrambot
+package handler
 
 import (
 	"context"
@@ -17,7 +17,9 @@ type middlewareFactory struct {
 	authSvc service.WishlistAuthService
 }
 
-func newMiddlewareFactory(authSvc service.WishlistAuthService) *middlewareFactory {
+func newMiddlewareFactory(
+	authSvc service.WishlistAuthService,
+) *middlewareFactory {
 	return &middlewareFactory{
 		authSvc: authSvc,
 	}

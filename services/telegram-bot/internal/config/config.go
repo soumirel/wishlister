@@ -15,6 +15,7 @@ const (
 
 type Config struct {
 	Server      Server      `mapstructure:"server"`
+	Valkey      Valkey      `mapstructure:"valkey"`
 	Services    Services    `mapstructure:"services"`
 	TelegramBot TelegramBot `mapstructure:"telegram_bot"`
 }
@@ -31,6 +32,11 @@ type TelegramBot struct {
 	Token string
 }
 
+type Valkey struct {
+	Addr     string `mapstructure:"addr"`
+	Password string
+}
+
 // Load reads configuration from defaults, optional config file, and env.
 // Env vars override file; file overrides defaults. Use WISHLIST_* for env (e.g. WISHLIST_DB_PASSWORD).
 func Load() (*Config, error) {
@@ -40,6 +46,8 @@ func Load() (*Config, error) {
 	v.SetDefault("server.http_addr", ":8080")
 	v.SetDefault("services.wishlist_grpc_addr", "localhost:8081")
 	v.SetDefault("telegram_bot.token", "")
+	v.SetDefault("valkey.addr", ":6379")
+	v.SetDefault("valkey.password", "")
 
 	// Optional config file
 	configPath := os.Getenv(envConfigPath)
