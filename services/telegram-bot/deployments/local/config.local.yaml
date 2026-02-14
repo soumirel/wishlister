@@ -1,5 +1,6 @@
 services:
-  wishlist_grpc_addr: "localhost:50001"
+  # wishlist_grpc_addr: "localhost:50001"
+  wishlist_grpc_addr: "localhost:8081"
 
 server:
   http_addr: ":50010"

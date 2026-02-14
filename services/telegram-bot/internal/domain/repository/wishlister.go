@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/entity"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/model"
 )
 
 type ExternalIdentity struct {
@@ -17,5 +17,5 @@ type WishlistCoreAuthRepository interface {
 }
 
 type WishlistCoreReadRepository interface {
-	GetWishlists(ctx context.Context) (entity.WishlistListModel, error)
+	GetWishlists(ctx context.Context) (model.WishlistList, error)
 }

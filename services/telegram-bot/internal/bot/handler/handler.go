@@ -8,35 +8,27 @@ import (
 	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/auth"
-	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/message"
-	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/service"
-)
-
-const (
-	identityProvider = "telegram"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/bot/view"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/ui"
 )
 
 type botHandler struct {
-	wishlistReadSvc service.WishlistCoreReadService
+	intentDispatcher ui.IntentDispatcher
 }
 
 func NewBotHandler(
-	wishlistReadSvc service.WishlistCoreReadService,
+	intentDispatcher ui.IntentDispatcher,
 ) *botHandler {
 	return &botHandler{
-		wishlistReadSvc: wishlistReadSvc,
+		intentDispatcher: intentDispatcher,
 	}
 }
 
 func (h *botHandler) HandleListCommand(ctx context.Context, b *bot.Bot, update *models.Update) {
-	list, err := h.wishlistReadSvc.GetWishlists(ctx)
+	err := h.intentDispatcher.DispatchViewIntent(ctx, ui.ShowWishlistsIntent{}, view.NewTelegramView(b, update))
 	if err != nil {
-		log.Print(err.Error())
+		log.Printf("presenter error: %v\n", err.Error())
 	}
-	b.SendMessage(ctx, &bot.SendMessageParams{
-		ChatID: update.Message.Chat.ID,
-		Text:   message.MakeGetWishlistsMessage(list),
-	})
 }
 
 func (h *botHandler) Handle(ctx context.Context, b *bot.Bot, update *models.Update) {

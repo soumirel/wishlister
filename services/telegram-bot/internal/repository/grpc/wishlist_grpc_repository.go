@@ -4,7 +4,7 @@ import (
 	"context"
 
 	pb "github.com/soumirel/wishlister/api/proto/gen/go/wishlist"
-	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/entity"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/model"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/repository"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/repository/grpc/interceptors"
 	"google.golang.org/grpc"
@@ -61,7 +61,7 @@ func (r *wishlistGRPC) GetUserIdByExternalIdentity(ctx context.Context, ei repos
 	if err != nil {
 		switch {
 		case status.Code(err) == codes.NotFound:
-			return "", entity.ErrUserDoesNotExist
+			return "", model.ErrUserDoesNotExist
 
 		}
 		return "", err
@@ -85,16 +85,16 @@ func (r *wishlistGRPC) CreateUserFromExternalIdentity(ctx context.Context, ei re
 	return userID, nil
 }
 
-func (r *wishlistGRPC) GetWishlists(ctx context.Context) (entity.WishlistListModel, error) {
+func (r *wishlistGRPC) GetWishlists(ctx context.Context) (model.WishlistList, error) {
 	req := pb.GetWishlistsRequest{}
 	resp, err := r.stub.GetWishlists(ctx, &req)
 	if err != nil {
 		return nil, err
 	}
 	wishlistsResp := resp.GetWishlists()
-	list := make(entity.WishlistListModel, len(wishlistsResp))
+	list := make(model.WishlistList, len(wishlistsResp))
 	for i, v := range wishlistsResp {
-		list[i] = &entity.WishlistListItemModel{
+		list[i] = &model.WishlistListItem{
 			ID:     v.ID,
 			UserID: v.UserID,
 			Name:   v.Name,

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/entity"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/model"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/repository"
 )
 
@@ -23,14 +23,14 @@ func NewWishlisterAuthSvc(wishlisterAuthRepo repository.WishlistCoreAuthReposito
 	}
 }
 
-func (s *wishlisterAuthSvc) AuthByTelegramID(ctx context.Context, telegramID int64) (*entity.WishlisterUser, error) {
+func (s *wishlisterAuthSvc) AuthByTelegramID(ctx context.Context, telegramID int64) (*model.WishlisterUser, error) {
 	ei := repository.ExternalIdentity{
 		ExternalID:       strconv.FormatInt(telegramID, 10),
 		IdentityProvider: identityProvider,
 	}
 	userID, err := s.wishlisterAuthRepo.GetUserIdByExternalIdentity(ctx, ei)
 	if err != nil {
-		if errors.Is(err, entity.ErrUserDoesNotExist) {
+		if errors.Is(err, model.ErrUserDoesNotExist) {
 			return s.makeUserResult(s.createUserFromExternalIdentity(ctx, ei))
 		}
 		return nil, err
@@ -46,11 +46,11 @@ func (s *wishlisterAuthSvc) createUserFromExternalIdentity(ctx context.Context, 
 	return userID, nil
 }
 
-func (s *wishlisterAuthSvc) makeUserResult(userID string, err error) (*entity.WishlisterUser, error) {
+func (s *wishlisterAuthSvc) makeUserResult(userID string, err error) (*model.WishlisterUser, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &entity.WishlisterUser{
+	return &model.WishlisterUser{
 		ID: userID,
 	}, nil
 }

@@ -4,7 +4,6 @@ go 1.25.1
 
 require (
 	github.com/go-telegram/bot v1.18.0
-	github.com/soumirel/wishlister/api/proto/gen/go/wishlist v0.0.0-20260206223426-7908ef7f818e
 	github.com/spf13/viper v1.21.0
 	google.golang.org/grpc v1.78.0
 )

@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/entity"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/model"
 )
 
 type GetWishlistsParams struct {
@@ -11,5 +11,5 @@ type GetWishlistsParams struct {
 }
 
 type WishlistCoreReadService interface {
-	GetWishlists(ctx context.Context) (entity.WishlistListModel, error)
+	GetWishlists(ctx context.Context) (model.WishlistList, error)
 }

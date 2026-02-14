@@ -9,7 +9,7 @@ import (
 	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/auth"
-	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/entity"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/model"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/service"
 )
 
@@ -43,7 +43,7 @@ func (mwf *middlewareFactory) AuthMiddleware() bot.Middleware {
 	}
 }
 
-func (mwf *middlewareFactory) authUpdate(ctx context.Context, update *models.Update) (*entity.WishlisterUser, error) {
+func (mwf *middlewareFactory) authUpdate(ctx context.Context, update *models.Update) (*model.WishlisterUser, error) {
 	senderTelegramUserID, ok := getTelegramSenderUserID(update)
 	if !ok {
 		return nil, errors.New("no sender id in update")

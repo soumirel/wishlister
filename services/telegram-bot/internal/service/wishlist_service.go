@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/entity"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/model"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/repository"
 )
 
@@ -17,6 +17,6 @@ func NewWishlisterReadSvc(readRepo repository.WishlistCoreReadRepository) *wishl
 	}
 }
 
-func (s *wishlisterReadSvc) GetWishlists(ctx context.Context) (entity.WishlistListModel, error) {
+func (s *wishlisterReadSvc) GetWishlists(ctx context.Context) (model.WishlistList, error) {
 	return s.readRepo.GetWishlists(ctx)
 }

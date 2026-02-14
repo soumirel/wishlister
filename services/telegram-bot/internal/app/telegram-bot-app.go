@@ -6,9 +6,10 @@ import (
 	"os"
 	"os/signal"
 
+	tgbotcontroller "github.com/soumirel/wishlister/services/telegram-bot/internal/bot/handler"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/config"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/controller/http"
-	tgbotcontroller "github.com/soumirel/wishlister/services/telegram-bot/internal/controller/telegram_bot"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/presenter"
 	grpcrepo "github.com/soumirel/wishlister/services/telegram-bot/internal/repository/grpc"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/service"
 )
@@ -29,12 +30,25 @@ func Run() {
 	wishlisterAuthSvc := service.NewWishlisterAuthSvc(wishlisterGRPC)
 	wishlistReadSvc := service.NewWishlisterReadSvc(wishlisterGRPC)
 
+	svcFactory := service.NewServiceFactory(
+		wishlistReadSvc,
+	)
+
+	presenterProvider, err := presenter.NewPresenterProvider(
+		presenter.NewMasterPresenter(svcFactory),
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	intentDispatcher := presenter.NewIntentDispatcher(presenterProvider)
+
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
 
 	err = tgbotcontroller.StartTelegramBot(
 		ctx, cfg.TelegramBot.Token,
-		wishlisterAuthSvc, wishlistReadSvc,
+		wishlisterAuthSvc, intentDispatcher,
 	)
 	if err != nil {
 		panic(err)

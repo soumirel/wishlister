@@ -5,17 +5,18 @@ import (
 
 	"github.com/go-telegram/bot"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/service"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/ui"
 )
 
 func StartTelegramBot(
 	appCtx context.Context,
 	botToken string,
 	authSvc service.WishlistAuthService,
-	wishlistReadSvc service.WishlistCoreReadService,
+	intentDipatcher ui.IntentDispatcher,
 ) error {
 	mwFactory := newMiddlewareFactory(authSvc)
 
-	botHandler := NewBotHandler(wishlistReadSvc)
+	botHandler := NewBotHandler(intentDipatcher)
 
 	opts := []bot.Option{
 		bot.WithDefaultHandler(botHandler.Handle),
