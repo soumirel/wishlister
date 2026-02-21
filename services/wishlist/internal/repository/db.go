@@ -2,10 +2,10 @@ package repository
 
 import (
 	"context"
-	"log"
 	"time"
 
-	"github.com/soumirel/wishlister/services/wishlist/pkg/postgres"
+	"github.com/soumirel/wishlister/pkg/logger"
+	"github.com/soumirel/wishlister/pkg/postgres"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
@@ -36,20 +36,26 @@ func (c *postgresClient) GetConn(ctx context.Context) (Conn, error) {
 }
 
 func InitPostgresClient(dbCfg postgres.DbConfig, migrationsScript string) *postgresClient {
+	logger := logger.L().Named("db").Sugar()
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	pgClient, err := postgres.NewClient(ctx, dbCfg)
 	if err != nil {
-		log.Fatal("connection to db failed:", err)
+		logger.Fatal("connection to db failed:", err)
 	}
+
 	err = pgClient.Ping(ctx)
 	if err != nil {
-		log.Fatal("db ping failed:", err.Error())
+		logger.Fatal("db ping failed:", err.Error())
 	}
+	logger.Info("postgresql pinged successfully")
+
 	err = execScript(ctx, pgClient, migrationsScript)
 	if err != nil {
-		log.Fatal("db migrations script failed:", err.Error())
+		logger.Fatalw("postgresql db migrations failed", err)
 	}
+	logger.Info("postgresql migrations script execed successfully")
+
 	return &postgresClient{
 		pgClient,
 	}

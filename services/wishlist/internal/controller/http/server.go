@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	v1 "github.com/soumirel/wishlister/services/wishlist/internal/controller/http/v1"
+	"github.com/soumirel/wishlister/services/wishlist/internal/controller/http/v1/middleware"
 
 	useruc "github.com/soumirel/wishlister/services/wishlist/internal/usecase/user"
 	wishuc "github.com/soumirel/wishlister/services/wishlist/internal/usecase/wish"
@@ -21,6 +22,7 @@ func StartHttpServer(
 	wishUc *wishuc.WishUsecase,
 	wishlistPermissionUc *wishlistpermuc.WishlistPermissionUsecase,
 ) {
+	// gin.SetMode(gin.ReleaseMode)
 	e := gin.New()
 
 	{
@@ -30,7 +32,9 @@ func StartHttpServer(
 	}
 
 	{
-		v1Group := e.Group("/v1")
+		v1Group := e.Group("/v1",
+			middleware.LoggerMiddleware(),
+		)
 
 		v1.BindHandlers(v1Group, userUc, wishlistUc, wishUc, wishlistPermissionUc)
 	}

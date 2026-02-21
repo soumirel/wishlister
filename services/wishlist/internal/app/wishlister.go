@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/soumirel/wishlister/pkg/logger"
 	"github.com/soumirel/wishlister/services/wishlist/internal/config"
 	grpcController "github.com/soumirel/wishlister/services/wishlist/internal/controller/grpc"
 	httpController "github.com/soumirel/wishlister/services/wishlist/internal/controller/http"
@@ -19,12 +20,16 @@ import (
 func Run() {
 	cfg, err := config.Load()
 	if err != nil {
-		log.Fatal("load config:", err)
+		log.Fatalf("config loading failed: %v", err.Error())
 	}
+
+	logger := logger.Init(map[string]any{
+		"service": "wishlist",
+	}).Sugar()
 
 	migrationsBytes, err := os.ReadFile(cfg.Paths.Migrations)
 	if err != nil {
-		log.Fatal("open migrations file failed:", err.Error())
+		logger.Fatalw("migrations file reading failed", err)
 	}
 
 	postgresClient := repository.InitPostgresClient(

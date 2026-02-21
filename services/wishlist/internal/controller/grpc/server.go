@@ -43,6 +43,7 @@ func StartGrpcServer(
 		return err
 	}
 	opts := []grpc.ServerOption{
+		grpc.ChainUnaryInterceptor(interceptors.LoggerUnaryInterceptor),
 		grpc.ChainUnaryInterceptor(interceptors.AuthUnaryInterceptor),
 	}
 	s := grpc.NewServer(opts...)

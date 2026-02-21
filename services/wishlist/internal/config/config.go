@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/soumirel/wishlister/services/wishlist/pkg/postgres"
+	"github.com/soumirel/wishlister/pkg/postgres"
 
 	"github.com/spf13/viper"
 )

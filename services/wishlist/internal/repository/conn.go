@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/soumirel/wishlister/services/wishlist/pkg/postgres"
+	"github.com/soumirel/wishlister/pkg/postgres"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )

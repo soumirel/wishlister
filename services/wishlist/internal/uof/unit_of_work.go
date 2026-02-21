@@ -3,13 +3,13 @@ package uof
 import (
 	"context"
 	"errors"
-	"fmt"
-	"log"
 	"sync"
 	"sync/atomic"
 
+	"github.com/soumirel/wishlister/pkg/logger"
 	domainRepo "github.com/soumirel/wishlister/services/wishlist/internal/domain/repository"
 	"github.com/soumirel/wishlister/services/wishlist/internal/repository"
+	"go.uber.org/zap"
 )
 
 type UnitOfWork interface {
@@ -44,6 +44,7 @@ func (u *unitOfWork) Do(ctx context.Context, fn func(ctx context.Context, rf dom
 		return errors.New("unit of work done")
 	}
 	defer u.done.Store(true)
+	logger := logger.FromContext(ctx)
 
 	var err error
 	u.initOnce.Do(func() {
@@ -88,7 +89,9 @@ func (u *unitOfWork) Do(ctx context.Context, fn func(ctx context.Context, rf dom
 		if err != nil {
 			err := u.tx.Rollback(ctx)
 			if err != nil {
-				log.Println(fmt.Errorf("rollback error: %w", err))
+				logger.Warn("unit of work tx rollback failed",
+					zap.Error(err),
+				)
 			}
 		} else {
 			err := u.tx.Commit(ctx)

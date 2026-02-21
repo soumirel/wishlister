@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/soumirel/wishlister/services/wishlist/pkg/postgres"
+	"github.com/soumirel/wishlister/pkg/postgres"
 )
 
 func setupTestDB(t *testing.T) Querier {
