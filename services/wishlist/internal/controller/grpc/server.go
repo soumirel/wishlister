@@ -126,3 +126,28 @@ func (s *grpcServer) GetUserIdByExternalIdentity(
 	}
 	return &resp, nil
 }
+
+func (s *grpcServer) CreateWishlist(
+	ctx context.Context, req *pb.CreateWishlistRequest,
+) (*pb.CreateWishlistResponse, error) {
+	a, ok := auth.FromCtx(ctx)
+	if !ok {
+		return nil, auth.ErrUnauthorized
+	}
+	cmd := wishlistuc.CreateWishlistCommand{
+		RequestorUserID: a.UserID,
+		Name:            req.GetName(),
+	}
+	wishlist, err := s.wishlistUc.CreateWishlist(ctx, cmd)
+	if err != nil {
+		return nil, err
+	}
+	resp := pb.CreateWishlistResponse{
+		Wishlist: &pb.Wishlist{
+			ID:     wishlist.ID,
+			UserID: wishlist.UserID,
+			Name:   wishlist.Name,
+		},
+	}
+	return &resp, nil
+}

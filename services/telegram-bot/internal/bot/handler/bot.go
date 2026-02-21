@@ -4,27 +4,37 @@ import (
 	"context"
 
 	"github.com/go-telegram/bot"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/bot/model"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/service"
-	"github.com/soumirel/wishlister/services/telegram-bot/internal/domain/ui"
+	"github.com/soumirel/wishlister/services/telegram-bot/internal/ui"
+	wishlistcreator "github.com/soumirel/wishlister/services/telegram-bot/internal/ui/wishlist_creator"
 )
 
 const (
-	emptyPattern = ""
+	noPattern = ""
 )
 
 func StartTelegramBot(
 	appCtx context.Context,
 	botToken string,
 	authSvc service.WishlistAuthService,
-	intentDipatcher ui.IntentDispatcher,
-	viewStateSvc viewStateService,
+	viewActivityStore model.ViewStore,
+	wishlistService service.WishlistCoreService,
+	stateQueryStore wishlistcreator.StateQueryStore,
+	vlc ui.ViewLifecycleController,
 ) error {
 	mwFactory := newMiddlewareFactory(authSvc)
-	handlerFactory := NewHandlerFactory(intentDipatcher, viewStateSvc)
+
+	handlerFactory := NewBotHandleFuncFactory(
+		viewActivityStore,
+		wishlistService,
+		stateQueryStore,
+		vlc,
+	)
 
 	opts := []bot.Option{
 		bot.WithDefaultHandler(
-			handlerFactory.getEchoHandleFunc(),
+			handlerFactory.NewBotHandlerFunc(),
 		),
 		bot.WithMiddlewares(
 			mwFactory.AuthMiddleware(),
@@ -39,14 +49,14 @@ func StartTelegramBot(
 	handlerFactory.RegisterHandler(
 		b,
 		bot.HandlerTypeMessageText,
-		wishlistsCommand,
+		model.WishlistsCommand,
 		bot.MatchTypeCommandStartOnly,
 	)
 
 	handlerFactory.RegisterHandler(
 		b,
 		bot.HandlerTypeMessageText,
-		createWishlistCommand,
+		model.CreateWishlistCommand,
 		bot.MatchTypeCommandStartOnly,
 	)
 

@@ -11,6 +11,15 @@ type WishlistCoreAuthRepository interface {
 	CreateUserFromExternalIdentity(ctx context.Context, ei model.ExternalIdentity) (string, error)
 }
 
+type WishlistCoreRepository interface {
+	WishlistCoreReadRepository
+	WishlistCoreQueryRepository
+}
+
 type WishlistCoreReadRepository interface {
 	GetWishlists(ctx context.Context) (model.WishlistList, error)
+}
+
+type WishlistCoreQueryRepository interface {
+	CreateWishlist(ctx context.Context, w model.Wishlist) (model.Wishlist, error)
 }

@@ -12,11 +12,6 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-type WishlistRepository interface {
-	GetUserIdByExternalIdentity(ctx context.Context, ei model.ExternalIdentity) (string, error)
-	CreateUserFromExternalIdentity(ctx context.Context, ei model.ExternalIdentity) (string, error)
-}
-
 type wishlistGRPC struct {
 	stub pb.WishlistServiceClient
 }
@@ -93,11 +88,30 @@ func (r *wishlistGRPC) GetWishlists(ctx context.Context) (model.WishlistList, er
 	wishlistsResp := resp.GetWishlists()
 	list := make(model.WishlistList, len(wishlistsResp))
 	for i, v := range wishlistsResp {
-		list[i] = &model.WishlistListItem{
+		list[i] = &model.Wishlist{
 			ID:     v.ID,
 			UserID: v.UserID,
 			Name:   v.Name,
 		}
 	}
 	return list, nil
+}
+
+func (r *wishlistGRPC) CreateWishlist(ctx context.Context, w model.Wishlist) (model.Wishlist, error) {
+	req := pb.CreateWishlistRequest{
+		Name: w.Name,
+	}
+	resp, err := r.stub.CreateWishlist(ctx, &pb.CreateWishlistRequest{
+		Name: req.Name,
+	})
+	if err != nil {
+		return model.Wishlist{}, err
+	}
+	wishlistResp := resp.GetWishlist()
+	wishlist := model.Wishlist{
+		ID:     wishlistResp.GetID(),
+		Name:   wishlistResp.GetName(),
+		UserID: wishlistResp.GetUserID(),
+	}
+	return wishlist, nil
 }

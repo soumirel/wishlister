@@ -1,9 +1,9 @@
 package model
 
-type WishlistListItem struct {
+type Wishlist struct {
 	ID     string
 	UserID string
 	Name   string
 }
 
-type WishlistList []*WishlistListItem
+type WishlistList []*Wishlist

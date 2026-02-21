@@ -78,7 +78,7 @@ func (r *wishlistPermissionRepo) DeleteWishlistPermission(ctx context.Context, u
 				AND wishlist_id = $2`
 	_, err := r.q.Exec(ctx, query, userID, wishlistID)
 	if err != nil {
-		return nil
+		return err
 	}
 	return nil
 }

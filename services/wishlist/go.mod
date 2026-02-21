@@ -7,7 +7,7 @@ require (
 	github.com/gin-gonic/gin v1.11.0
 	github.com/gofrs/uuid/v5 v5.4.0
 	github.com/jackc/pgx/v5 v5.7.6
-	github.com/soumirel/wishlister/api/proto/gen/go/wishlist v0.0.0-20260209012655-23a407fb2a60
+	github.com/soumirel/wishlister/api/proto/gen/go/wishlist v0.0.0-20260221130106-cbf413238685
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.11.1
 	google.golang.org/grpc v1.78.0
