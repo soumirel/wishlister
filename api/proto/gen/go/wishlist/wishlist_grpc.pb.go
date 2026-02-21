@@ -22,6 +22,7 @@ const (
 	WishlistService_GetUserIdByExternalIdentity_FullMethodName    = "/wishlist.WishlistService/GetUserIdByExternalIdentity"
 	WishlistService_CreateUserFromExternalIdentity_FullMethodName = "/wishlist.WishlistService/CreateUserFromExternalIdentity"
 	WishlistService_GetWishlists_FullMethodName                   = "/wishlist.WishlistService/GetWishlists"
+	WishlistService_CreateWishlist_FullMethodName                 = "/wishlist.WishlistService/CreateWishlist"
 )
 
 // WishlistServiceClient is the client API for WishlistService service.
@@ -31,6 +32,7 @@ type WishlistServiceClient interface {
 	GetUserIdByExternalIdentity(ctx context.Context, in *GetUserIdByExternalIdentityRequest, opts ...grpc.CallOption) (*GetUserIdByExternalIdentityResponse, error)
 	CreateUserFromExternalIdentity(ctx context.Context, in *CreateUserFromExternalIdentityRequest, opts ...grpc.CallOption) (*CreateUserFromExternalIdentityResponse, error)
 	GetWishlists(ctx context.Context, in *GetWishlistsRequest, opts ...grpc.CallOption) (*GetWishlistsResponse, error)
+	CreateWishlist(ctx context.Context, in *CreateWishlistRequest, opts ...grpc.CallOption) (*CreateWishlistResponse, error)
 }
 
 type wishlistServiceClient struct {
@@ -71,6 +73,16 @@ func (c *wishlistServiceClient) GetWishlists(ctx context.Context, in *GetWishlis
 	return out, nil
 }
 
+func (c *wishlistServiceClient) CreateWishlist(ctx context.Context, in *CreateWishlistRequest, opts ...grpc.CallOption) (*CreateWishlistResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateWishlistResponse)
+	err := c.cc.Invoke(ctx, WishlistService_CreateWishlist_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WishlistServiceServer is the server API for WishlistService service.
 // All implementations must embed UnimplementedWishlistServiceServer
 // for forward compatibility.
@@ -78,6 +90,7 @@ type WishlistServiceServer interface {
 	GetUserIdByExternalIdentity(context.Context, *GetUserIdByExternalIdentityRequest) (*GetUserIdByExternalIdentityResponse, error)
 	CreateUserFromExternalIdentity(context.Context, *CreateUserFromExternalIdentityRequest) (*CreateUserFromExternalIdentityResponse, error)
 	GetWishlists(context.Context, *GetWishlistsRequest) (*GetWishlistsResponse, error)
+	CreateWishlist(context.Context, *CreateWishlistRequest) (*CreateWishlistResponse, error)
 	mustEmbedUnimplementedWishlistServiceServer()
 }
 
@@ -96,6 +109,9 @@ func (UnimplementedWishlistServiceServer) CreateUserFromExternalIdentity(context
 }
 func (UnimplementedWishlistServiceServer) GetWishlists(context.Context, *GetWishlistsRequest) (*GetWishlistsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetWishlists not implemented")
+}
+func (UnimplementedWishlistServiceServer) CreateWishlist(context.Context, *CreateWishlistRequest) (*CreateWishlistResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateWishlist not implemented")
 }
 func (UnimplementedWishlistServiceServer) mustEmbedUnimplementedWishlistServiceServer() {}
 func (UnimplementedWishlistServiceServer) testEmbeddedByValue()                         {}
@@ -172,6 +188,24 @@ func _WishlistService_GetWishlists_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WishlistService_CreateWishlist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateWishlistRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WishlistServiceServer).CreateWishlist(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WishlistService_CreateWishlist_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WishlistServiceServer).CreateWishlist(ctx, req.(*CreateWishlistRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WishlistService_ServiceDesc is the grpc.ServiceDesc for WishlistService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -190,6 +224,10 @@ var WishlistService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetWishlists",
 			Handler:    _WishlistService_GetWishlists_Handler,
+		},
+		{
+			MethodName: "CreateWishlist",
+			Handler:    _WishlistService_CreateWishlist_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

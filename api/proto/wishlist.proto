@@ -39,6 +39,14 @@ message GetWishlistsResponse {
     repeated Wishlist Wishlists = 1;
 }
 
+message CreateWishlistRequest {
+    string Name = 1;
+}
+
+message CreateWishlistResponse {
+    Wishlist Wishlist = 1;
+}
+
 // 
 service WishlistService {
     //
@@ -49,4 +57,7 @@ service WishlistService {
 
     //
     rpc GetWishlists(GetWishlistsRequest) returns (GetWishlistsResponse);
+
+    //
+    rpc CreateWishlist(CreateWishlistRequest) returns (CreateWishlistResponse);
 }

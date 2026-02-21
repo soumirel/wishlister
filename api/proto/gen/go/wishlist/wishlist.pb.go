@@ -389,6 +389,94 @@ func (x *GetWishlistsResponse) GetWishlists() []*Wishlist {
 	return nil
 }
 
+type CreateWishlistRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=Name,proto3" json:"Name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateWishlistRequest) Reset() {
+	*x = CreateWishlistRequest{}
+	mi := &file_wishlist_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateWishlistRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateWishlistRequest) ProtoMessage() {}
+
+func (x *CreateWishlistRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_wishlist_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateWishlistRequest.ProtoReflect.Descriptor instead.
+func (*CreateWishlistRequest) Descriptor() ([]byte, []int) {
+	return file_wishlist_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *CreateWishlistRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type CreateWishlistResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Wishlist      *Wishlist              `protobuf:"bytes,1,opt,name=Wishlist,proto3" json:"Wishlist,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateWishlistResponse) Reset() {
+	*x = CreateWishlistResponse{}
+	mi := &file_wishlist_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateWishlistResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateWishlistResponse) ProtoMessage() {}
+
+func (x *CreateWishlistResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_wishlist_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateWishlistResponse.ProtoReflect.Descriptor instead.
+func (*CreateWishlistResponse) Descriptor() ([]byte, []int) {
+	return file_wishlist_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *CreateWishlistResponse) GetWishlist() *Wishlist {
+	if x != nil {
+		return x.Wishlist
+	}
+	return nil
+}
+
 var File_wishlist_proto protoreflect.FileDescriptor
 
 const file_wishlist_proto_rawDesc = "" +
@@ -413,11 +501,16 @@ const file_wishlist_proto_rawDesc = "" +
 	"\x06UserID\x18\x01 \x01(\tR\x06UserID\"\x15\n" +
 	"\x13GetWishlistsRequest\"H\n" +
 	"\x14GetWishlistsResponse\x120\n" +
-	"\tWishlists\x18\x01 \x03(\v2\x12.wishlist.WishlistR\tWishlists2\xe2\x02\n" +
+	"\tWishlists\x18\x01 \x03(\v2\x12.wishlist.WishlistR\tWishlists\"+\n" +
+	"\x15CreateWishlistRequest\x12\x12\n" +
+	"\x04Name\x18\x01 \x01(\tR\x04Name\"H\n" +
+	"\x16CreateWishlistResponse\x12.\n" +
+	"\bWishlist\x18\x01 \x01(\v2\x12.wishlist.WishlistR\bWishlist2\xb7\x03\n" +
 	"\x0fWishlistService\x12z\n" +
 	"\x1bGetUserIdByExternalIdentity\x12,.wishlist.GetUserIdByExternalIdentityRequest\x1a-.wishlist.GetUserIdByExternalIdentityResponse\x12\x83\x01\n" +
 	"\x1eCreateUserFromExternalIdentity\x12/.wishlist.CreateUserFromExternalIdentityRequest\x1a0.wishlist.CreateUserFromExternalIdentityResponse\x12M\n" +
-	"\fGetWishlists\x12\x1d.wishlist.GetWishlistsRequest\x1a\x1e.wishlist.GetWishlistsResponseB:Z8github.com/soumirel/wishlister/api/proto/gen/go/wishlistb\x06proto3"
+	"\fGetWishlists\x12\x1d.wishlist.GetWishlistsRequest\x1a\x1e.wishlist.GetWishlistsResponse\x12S\n" +
+	"\x0eCreateWishlist\x12\x1f.wishlist.CreateWishlistRequest\x1a .wishlist.CreateWishlistResponseB:Z8github.com/soumirel/wishlister/api/proto/gen/go/wishlistb\x06proto3"
 
 var (
 	file_wishlist_proto_rawDescOnce sync.Once
@@ -431,7 +524,7 @@ func file_wishlist_proto_rawDescGZIP() []byte {
 	return file_wishlist_proto_rawDescData
 }
 
-var file_wishlist_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_wishlist_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_wishlist_proto_goTypes = []any{
 	(*Wishlist)(nil),                               // 0: wishlist.Wishlist
 	(*ExternalIdentity)(nil),                       // 1: wishlist.ExternalIdentity
@@ -441,22 +534,27 @@ var file_wishlist_proto_goTypes = []any{
 	(*CreateUserFromExternalIdentityResponse)(nil), // 5: wishlist.CreateUserFromExternalIdentityResponse
 	(*GetWishlistsRequest)(nil),                    // 6: wishlist.GetWishlistsRequest
 	(*GetWishlistsResponse)(nil),                   // 7: wishlist.GetWishlistsResponse
+	(*CreateWishlistRequest)(nil),                  // 8: wishlist.CreateWishlistRequest
+	(*CreateWishlistResponse)(nil),                 // 9: wishlist.CreateWishlistResponse
 }
 var file_wishlist_proto_depIdxs = []int32{
 	1, // 0: wishlist.GetUserIdByExternalIdentityRequest.ExternalIdentity:type_name -> wishlist.ExternalIdentity
 	1, // 1: wishlist.CreateUserFromExternalIdentityRequest.ExternalIdentity:type_name -> wishlist.ExternalIdentity
 	0, // 2: wishlist.GetWishlistsResponse.Wishlists:type_name -> wishlist.Wishlist
-	2, // 3: wishlist.WishlistService.GetUserIdByExternalIdentity:input_type -> wishlist.GetUserIdByExternalIdentityRequest
-	4, // 4: wishlist.WishlistService.CreateUserFromExternalIdentity:input_type -> wishlist.CreateUserFromExternalIdentityRequest
-	6, // 5: wishlist.WishlistService.GetWishlists:input_type -> wishlist.GetWishlistsRequest
-	3, // 6: wishlist.WishlistService.GetUserIdByExternalIdentity:output_type -> wishlist.GetUserIdByExternalIdentityResponse
-	5, // 7: wishlist.WishlistService.CreateUserFromExternalIdentity:output_type -> wishlist.CreateUserFromExternalIdentityResponse
-	7, // 8: wishlist.WishlistService.GetWishlists:output_type -> wishlist.GetWishlistsResponse
-	6, // [6:9] is the sub-list for method output_type
-	3, // [3:6] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	0, // 3: wishlist.CreateWishlistResponse.Wishlist:type_name -> wishlist.Wishlist
+	2, // 4: wishlist.WishlistService.GetUserIdByExternalIdentity:input_type -> wishlist.GetUserIdByExternalIdentityRequest
+	4, // 5: wishlist.WishlistService.CreateUserFromExternalIdentity:input_type -> wishlist.CreateUserFromExternalIdentityRequest
+	6, // 6: wishlist.WishlistService.GetWishlists:input_type -> wishlist.GetWishlistsRequest
+	8, // 7: wishlist.WishlistService.CreateWishlist:input_type -> wishlist.CreateWishlistRequest
+	3, // 8: wishlist.WishlistService.GetUserIdByExternalIdentity:output_type -> wishlist.GetUserIdByExternalIdentityResponse
+	5, // 9: wishlist.WishlistService.CreateUserFromExternalIdentity:output_type -> wishlist.CreateUserFromExternalIdentityResponse
+	7, // 10: wishlist.WishlistService.GetWishlists:output_type -> wishlist.GetWishlistsResponse
+	9, // 11: wishlist.WishlistService.CreateWishlist:output_type -> wishlist.CreateWishlistResponse
+	8, // [8:12] is the sub-list for method output_type
+	4, // [4:8] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_wishlist_proto_init() }
@@ -470,7 +568,7 @@ func file_wishlist_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_wishlist_proto_rawDesc), len(file_wishlist_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
