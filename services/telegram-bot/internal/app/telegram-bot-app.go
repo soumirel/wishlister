@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/soumirel/wishlister/pkg/logger"
 	tgbothandler "github.com/soumirel/wishlister/services/telegram-bot/internal/bot/handler"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/ui"
 
@@ -24,6 +25,10 @@ func Run() {
 		log.Fatal("load config:", err)
 	}
 
+	logger := logger.Init(map[string]any{
+		"service": "wishlist",
+	}).Sugar()
+
 	// healthcheck server
 	http.StartHttpServer(cfg.Server.HTTPAddr)
 
@@ -35,13 +40,13 @@ func Run() {
 		},
 	)
 	if err != nil {
-		panic(err)
+		logger.Fatalw("valkey client instantination failed", err)
 	}
 
 	// grpc clients
 	wishlisterGRPC, err := grpcrepo.NewWishlistGrpcRepository(cfg.Services.WishlistGrpcAddr)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatalw("wishlist grpc repository instantination failed", err)
 	}
 
 	// services
@@ -72,8 +77,9 @@ func Run() {
 		vlc,
 	)
 	if err != nil {
-		panic(err)
+		logger.Fatalw("telegram bot handler start failed", err)
 	}
 
+	logger.Info("application started successfully")
 	select {}
 }

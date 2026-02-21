@@ -2,11 +2,11 @@ package handler
 
 import (
 	"context"
-	"log"
 
 	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
 	tgmodels "github.com/go-telegram/bot/models"
+	"github.com/soumirel/wishlister/pkg/logger"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/bot/model"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/bot/navigator"
 	"github.com/soumirel/wishlister/services/telegram-bot/internal/bot/view"
@@ -78,7 +78,7 @@ func (hf *handlerFactory) NewBotHandlerFunc() bot.HandlerFunc {
 func (hf *handlerFactory) NewBotCallbackQueryHandlerFunc() bot.HandlerFunc {
 	// TODO
 	return func(ctx context.Context, bot *bot.Bot, update *tgmodels.Update) {
-		log.Printf("got callback query, not currently supported\n")
+		logger.FromContext(ctx).Warn("got not currently supported callback query")
 	}
 }
 

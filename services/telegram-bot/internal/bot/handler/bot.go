@@ -37,7 +37,11 @@ func StartTelegramBot(
 			handlerFactory.NewBotHandlerFunc(),
 		),
 		bot.WithMiddlewares(
+			mwFactory.LoggerMiddleware(),
 			mwFactory.AuthMiddleware(),
+		),
+		bot.WithErrorsHandler(
+			mwFactory.ErrorHandler(),
 		),
 	}
 
